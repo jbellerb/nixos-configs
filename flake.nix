@@ -18,7 +18,7 @@
 
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ self.overlay ];
+        overlays = [ self.overlays.default ];
       };
     in
     {
@@ -28,7 +28,7 @@
           pounce-extra;
       };
 
-      overlay = final: prev: { } // self.packages."${system}";
+      overlays.default = final: prev: { } // self.packages."${system}";
 
       nixosConfigurations = {
         shanghai = nixpkgs.lib.nixosSystem {
@@ -37,8 +37,20 @@
             hosts/shanghai/configuration.nix
           ];
         };
+        suez = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = defaultModules ++ [
+            hosts/suez/configuration.nix
+          ];
+        };
       };
 
-      nixosModules = { pounce = modules/pounce.nix; };
+      nixosModules = { pounce = import modules/pounce.nix; };
+
+      devShells."${system}".default = pkgs.mkShell {
+        nativeBuildInputs = [
+          pkgs.sops
+        ];
+      };
     };
 }
