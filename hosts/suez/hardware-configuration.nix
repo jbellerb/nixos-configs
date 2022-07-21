@@ -29,7 +29,7 @@
 
   boot.tmpOnTmpfs = true;
 
-  swapDevices = [ ];
+  swapDevices = [ { device = "/var/swapfile"; size = 2048; } ];
 
   hardware.cpu.intel.updateMicrocode = true;
 }

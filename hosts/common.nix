@@ -10,6 +10,8 @@ with lib;
     package = pkgs.nix_2_4;
     extraOptions = "experimental-features = nix-command flakes";
 
+    trustedUsers = [ "root" "@wheel" ];
+
     binaryCaches = [ "https://nix-community.cachix.org" ];
     binaryCachePublicKeys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -66,9 +68,9 @@ with lib;
     ];
   };
 
-  # Enable passwd
-  users.mutableUsers = true;
+  users.mutableUsers = false;
 
+  security.pam.enableSSHAgentAuth = true;
   security.sudo.extraConfig = ''
     %wheel ALL= NOPASSWD:${pkgs.rsync}/bin/rsync
   '';
