@@ -2,10 +2,13 @@
 
 {
   networking.hostName = "suez";
+  sops.defaultSopsFile = secrets/secrets.yaml;
 
   imports = [
     ./hardware-configuration.nix
     ../common.nix
+
+    ./modules/wireguard.nix
   ];
 
   ########################
@@ -20,11 +23,12 @@
   ##############
 
   # DHCP
-  networking.useDHCP = true;
+  networking.useDHCP = false;
+  networking.interfaces.eth0.useDHCP = true;
 
   # Firewall setting
   networking.firewall.enable = true;
+  networking.firewall.allowPing = true;
   networking.firewall.allowedTCPPorts = [ ];
   networking.firewall.allowedUDPPorts = [ ];
-  networking.firewall.allowPing = true;
 }

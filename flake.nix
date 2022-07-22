@@ -9,6 +9,8 @@
     let
       system = "x86_64-linux";
 
+      metadata = import hosts/metadata.nix;
+
       defaultModules = [
         { 
           imports = nixpkgs.lib.attrValues self.nixosModules;
@@ -58,18 +60,22 @@
         sshOpts = [ "-A" ];
 
         nodes.suez = {
-          hostname = "127.0.0.1";
+          hostname = metadata.hosts.suez.ip_addr;
           profiles.system.path =
             deployLib.activate.nixos self.nixosConfigurations.suez;
         };
       };
 
-      nixosModules = { pounce = import modules/pounce.nix; };
+      nixosModules = {
+        metadata = import modules/metadata.nix;
+        pounce = import modules/pounce.nix;
+      };
 
       devShells."${system}".default = pkgs.mkShell {
         nativeBuildInputs = [
-          pkgs.sops
           pkgs.deploy-rs
+          pkgs.sops
+          pkgs.wireguard-tools
         ];
       };
 

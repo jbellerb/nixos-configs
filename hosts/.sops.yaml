@@ -3,12 +3,6 @@ keys:
   - &shanghai age15r9skq3lk306hdj4m284hhgm94yywe25dhdan0w6mud558rwquasfn0gz7
   - &suez age132n8ntfem5u3436q89xe3l5ha0yt0vghu3fx3f97vs7qyyjfh3rsup740z
 creation_rules:
-  - path_regex: secrets/[^/]+\.yaml$
-    key_groups:
-    - age:
-      - *lagos
-      - *shanghai
-      - *suez
   - path_regex: shanghai/secrets/[^/]+\.yaml$
     key_groups:
     - age:
@@ -18,4 +12,10 @@ creation_rules:
     key_groups:
     - age:
       - *lagos
+      - *suez
+  - path_regex: secrets/[^/]+\.yaml$
+    key_groups:
+    - age:
+      - *lagos
+      - *shanghai
       - *suez
