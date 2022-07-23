@@ -67,6 +67,7 @@
       };
 
       nixosModules = {
+        adlist = import modules/adlist.nix;
         metadata = import modules/metadata.nix;
         pounce = import modules/pounce.nix;
       };

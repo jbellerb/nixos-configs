@@ -8,7 +8,7 @@ let
     $ORIGIN home.
 
     @ IN SOA suez.home. suez.home. (
-           2022072301 ; serial
+           2022072302 ; serial
                 28800 ; refresh
                  7200 ; retry
                864000 ; expire
@@ -21,6 +21,27 @@ let
   '';
 
 in {
+  users = {
+    users.coredns = {
+      isSystemUser = true;
+
+      group = config.users.groups.coredns.name;
+      extraGroups = [ config.users.groups.keys.name ];
+    };
+
+    groups.coredns = { };
+  };
+
+  services.adlist = {
+    enable = true;
+    path = "/var/lib/coredns/hosts.blacklist";
+  };
+
+  systemd.services.coredns.serviceConfig.User = "coredns";
+  systemd.services.coredns.serviceConfig.StateDirectory = "coredns";
+
+  sops.secrets."Khome.+013+34119.key" = { owner = "coredns"; };
+  sops.secrets."Khome.+013+34119.private" = { owner = "coredns"; };
   services.coredns = {
     enable = true;
     config = ''
@@ -29,7 +50,12 @@ in {
         bind ${hosts.suez.wireguard.address.ipv6}
         errors
 
-        local
+        hosts /var/lib/coredns/hosts.blacklist {
+          reload 3600s
+          no_reverse
+          fallthrough
+        }
+
         forward . tls://1.1.1.1 tls://1.0.0.1 {
           tls_servername cloudflare-dns.com
           health_check 5s
@@ -45,7 +71,11 @@ in {
         bind ${hosts.suez.wireguard.address.ipv6}
         errors
 
-        file ${zoneFile}
+        file /var/lib/coredns/db.home.signed home
+
+        sign ${zoneFile} {
+          key file ${config.sops.secrets."Khome.+013+34119.key".path}
+        }
       }
     '';
   };
