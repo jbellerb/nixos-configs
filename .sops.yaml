@@ -3,17 +3,27 @@ keys:
   - &shanghai age15r9skq3lk306hdj4m284hhgm94yywe25dhdan0w6mud558rwquasfn0gz7
   - &suez age132n8ntfem5u3436q89xe3l5ha0yt0vghu3fx3f97vs7qyyjfh3rsup740z
 creation_rules:
-  - path_regex: shanghai/secrets/[^/]+\.yaml$
+  - path_regex: hosts/shanghai/secrets/[^/]+\.yaml$
     key_groups:
     - age:
       - *lagos
       - *shanghai
-  - path_regex: suez/secrets/[^/]+\.yaml$
+  - path_regex: hosts/suez/secrets/[^/]+\.yaml$
     key_groups:
     - age:
       - *lagos
       - *suez
-  - path_regex: secrets/[^/]+\.yaml$
+  - path_regex: hosts/secrets/keys/wg-suez-lagos-psk.yaml$
+    key_groups:
+    - age:
+      - *lagos
+      - *suez
+  - path_regex: hosts/secrets/keys/wg-suez-unmanaged-psk.yaml$
+    key_groups:
+    - age:
+      - *lagos
+      - *suez
+  - path_regex: hosts/secrets/[^/]+\.yaml$
     key_groups:
     - age:
       - *lagos

@@ -60,7 +60,7 @@
         sshOpts = [ "-A" ];
 
         nodes.suez = {
-          hostname = metadata.hosts.suez.ip_addr;
+          hostname = metadata.hosts.suez.wireguard.address.ipv4;
           profiles.system.path =
             deployLib.activate.nixos self.nixosConfigurations.suez;
         };

@@ -4,11 +4,16 @@ let
   hosts = config.metadata.hosts;
 
   mkPeer = peer: {
-    publicKey = peer.wireguard.publicKey;
+    publicKey = hosts."${peer}".wireguard.publicKey;
+    presharedKeyFile = config.sops.secrets."wireguard-suez-${peer}-psk".path;
     allowedIPs = [
-      "${peer.wireguard.address.ipv4}/32"
-      "${peer.wireguard.address.ipv6}/128"
+      "${hosts."${peer}".wireguard.address.ipv4}/32"
+      "${hosts."${peer}".wireguard.address.ipv6}/128"
     ];
+  };
+
+  pskSecret = peerClass: {
+    sopsFile = ../../secrets/keys + "/wg-suez-${peerClass}-psk.yaml";
   };
 
 in {
@@ -20,6 +25,8 @@ in {
   networking.nat.internalInterfaces = [ "wg0" ];
 
   sops.secrets.suez-wireguard-private = { };
+  sops.secrets.wireguard-suez-lagos-psk = pskSecret "lagos";
+  sops.secrets.wireguard-suez-tugboat-psk = pskSecret "unmanaged";
   networking.wireguard.interfaces = {
     wg0 = {
       ips = [
@@ -39,8 +46,8 @@ in {
       '';
 
       peers = builtins.map mkPeer (with hosts; [
-        tugboat
-        lagos
+        "tugboat"
+        "lagos"
       ]);
     };
   };
