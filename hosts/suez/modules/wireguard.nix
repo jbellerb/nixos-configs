@@ -27,6 +27,11 @@ in {
   sops.secrets.suez-wireguard-private = { };
   sops.secrets.wireguard-suez-lagos-psk = pskSecret "lagos";
   sops.secrets.wireguard-suez-tugboat-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-paris-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-carrier-1-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-carrier-2-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-carrier-3-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-carrier-4-psk = pskSecret "unmanaged";
   networking.wireguard.interfaces = {
     wg0 = {
       ips = [
@@ -48,6 +53,11 @@ in {
       peers = builtins.map mkPeer (with hosts; [
         "tugboat"
         "lagos"
+        "paris"
+        "carrier-1"
+        "carrier-2"
+        "carrier-3"
+        "carrier-4"
       ]);
     };
   };

@@ -9,6 +9,7 @@
     ../common.nix
 
     ./modules/wireguard.nix
+    ./modules/coredns.nix
   ];
 
   ########################
@@ -30,5 +31,5 @@
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
   networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedUDPPorts = [ ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
 }
