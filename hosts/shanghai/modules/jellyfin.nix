@@ -1,10 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   containers.jellyfin = {
     ephemeral = true;
     autoStart = true;
-    config = { config, pkgs, ... }: {
+    config = { pkgs, ... }: {
       networking.nameservers = [ "1.1.1.1" ];
       services.jellyfin = {
         enable = true;

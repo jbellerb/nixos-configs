@@ -1,5 +1,3 @@
-{ config, pkgs, lib, ... }:
-
 {
   users.users.git = {
     isNormalUser = true;

@@ -25,8 +25,9 @@ in {
   networking.nat.internalInterfaces = [ "wg0" ];
 
   sops.secrets.suez-wireguard-private = { };
-  sops.secrets.wireguard-suez-lagos-psk = pskSecret "lagos";
+  sops.secrets.wireguard-suez-shanghai-psk = pskSecret "shanghai";
   sops.secrets.wireguard-suez-tugboat-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-lagos-psk = pskSecret "unmanaged";
   sops.secrets.wireguard-suez-paris-psk = pskSecret "unmanaged";
   sops.secrets.wireguard-suez-carrier-1-psk = pskSecret "unmanaged";
   sops.secrets.wireguard-suez-carrier-2-psk = pskSecret "unmanaged";
@@ -51,6 +52,7 @@ in {
       '';
 
       peers = builtins.map mkPeer (with hosts; [
+        "shanghai"
         "tugboat"
         "lagos"
         "paris"

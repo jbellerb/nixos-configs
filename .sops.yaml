@@ -13,10 +13,11 @@ creation_rules:
     - age:
       - *lagos
       - *suez
-  - path_regex: hosts/secrets/keys/wg-suez-lagos-psk.yaml$
+  - path_regex: hosts/secrets/keys/wg-suez-shanghai-psk.yaml$
     key_groups:
     - age:
       - *lagos
+      - *shanghai
       - *suez
   - path_regex: hosts/secrets/keys/wg-suez-unmanaged-psk.yaml$
     key_groups:

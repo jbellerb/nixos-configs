@@ -60,9 +60,14 @@
         sshOpts = [ "-A" ];
 
         nodes.suez = {
-          hostname = metadata.hosts.suez.wireguard.address.ipv4;
+          hostname = metadata.hosts.suez.wireguard.address.ipv6;
           profiles.system.path =
             deployLib.activate.nixos self.nixosConfigurations.suez;
+        };
+        nodes.shanghai = {
+          hostname = metadata.hosts.shanghai.wireguard.address.ipv6;
+          profiles.system.path =
+            deployLib.activate.nixos self.nixosConfigurations.shanghai;
         };
       };
 

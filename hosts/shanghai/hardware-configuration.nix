@@ -1,4 +1,4 @@
-{ config, lib, modulesPath, ... }:
+{ lib, modulesPath, ... }:
 
 {
   imports = [ "${modulesPath}/installer/scan/not-detected.nix" ];
@@ -33,8 +33,8 @@
         fsType = "btrfs";
         options = [ "defaults,noatime,subvol=${subvol}" ];
       };
-    in
-    {
+
+    in {
       "/" = mkSubvol "@";
       "/nix" = mkSubvol "@nix";
       # "/etc/nixos" = mkSubvol "@nixos_configuration";

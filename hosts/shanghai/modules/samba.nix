@@ -1,9 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ lib, ... }:
 
 let
   shares = [ "jared" ];
-in
-{
+
+in {
   services.samba = {
     enable = true;
     securityType = "user";
@@ -13,7 +13,7 @@ in
       netbios name = shanghai
       #use sendfile = yes
       #max protocol = smb2
-      hosts allow = 192.168.1.0/24 10.49.0.0/16 localhost
+      hosts allow = 192.168.1.0/24 10.131.0.0/24 localhost
       hosts deny = 0.0.0.0/0
       guest account = nobody
       map to guest = bad user

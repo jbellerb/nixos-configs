@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   sops.secrets.shanghai-pounce-certfp-libera = { owner = "pounce"; };
