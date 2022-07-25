@@ -8,8 +8,8 @@
     ./hardware-configuration.nix
     ../common.nix
 
-    ./modules/wireguard.nix
     ./modules/coredns.nix
+    ./modules/wireguard.nix
   ];
 
   ########################
