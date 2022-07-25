@@ -37,13 +37,12 @@
     in {
       "/" = mkSubvol "@";
       "/nix" = mkSubvol "@nix";
-      # "/etc/nixos" = mkSubvol "@nixos_configuration";
       "/.snapshots" = mkSubvol "@snapshots/root_snaps";
       "/home" = mkSubvol "@home";
       "/home/.snapshots" = mkSubvol "@snapshots/home_snaps";
       "/var/btrfs_root" = mkSubvol "/";
     };
-  
+
   boot.loader.grub.device = "/dev/sda";
 
   boot.tmpOnTmpfs = true;
@@ -69,8 +68,8 @@
         TIMELINE_LIMIT_MONTHLY="6"
         TIMELINE_LIMIT_YEARLY="0"
       '';
-    in
-    {
+
+    in {
       "root" = {
         subvolume = "/";
         extraConfig = schedule;

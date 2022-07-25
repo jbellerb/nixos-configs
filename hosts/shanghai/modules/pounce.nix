@@ -32,28 +32,29 @@
       away = "Currently disconnected from bouncer. A notification has been sent.";
     };
 
-    notify = let
-      notify-script = network: ''
-        NETWORK="${network}"
-        WEBHOOK=$(cat "${config.sops.secrets.shanghai-pounce-webhook.path}")
+    notify =
+      let
+        notify-script = network: ''
+          NETWORK="${network}"
+          WEBHOOK=$(cat "${config.sops.secrets.shanghai-pounce-webhook.path}")
 
-        if [ -z "$NOTIFY_CHANNEL" ]; then
-          TITLE="Private Message"
-          CONTEXT="$NOTIFY_NICK"
-        else
-          TITLE="Highlight"
-          CONTEXT="$NOTIFY_CHANNEL"
-        fi
+          if [ -z "$NOTIFY_CHANNEL" ]; then
+            TITLE="Private Message"
+            CONTEXT="$NOTIFY_NICK"
+          else
+            TITLE="Highlight"
+            CONTEXT="$NOTIFY_CHANNEL"
+          fi
 
-        ${pkgs.curl}/bin/curl \
-          -H "Content-Type: application/json" \
-          -d "{\"embeds\":[{\"title\":\"$TITLE | $NETWORK/$CONTEXT\",\"description\":\"$NOTIFY_TIME $NOTIFY_NICK: $NOTIFY_MESSAGE\"}]}" \
-          $WEBHOOK
-      '';
-    in
-    {
-      libera.commands = notify-script "libera";
-      oftc.commands = notify-script "oftc";
-    };
+          ${pkgs.curl}/bin/curl \
+            -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"$TITLE | $NETWORK/$CONTEXT\",\"description\":\"$NOTIFY_TIME $NOTIFY_NICK: $NOTIFY_MESSAGE\"}]}" \
+            $WEBHOOK
+        '';
+
+      in {
+        libera.commands = notify-script "libera";
+        oftc.commands = notify-script "oftc";
+      };
   };
 }

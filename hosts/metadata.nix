@@ -20,7 +20,7 @@
   };
 
   hosts.tugboat = {
-    ssh_pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMuIgouw4tmR/OhZchYUyWKGTJL0AMTLXEOxRwqvHm41";
+    ssh_pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQk2p9D39c69apfAZM1TS9kBXmHVohiy0TllXY0ZRjM";
     wireguard = {
       address.ipv4 = "10.131.0.3";
       address.ipv6 = "fd3b:fe0b:d86b:a5ec::3";

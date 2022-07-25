@@ -39,7 +39,7 @@ with lib;
   # Services #
   ############
 
-  # SSH 
+  # SSH
   services.openssh = {
     enable = true;
 

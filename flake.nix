@@ -12,7 +12,7 @@
       metadata = import hosts/metadata.nix;
 
       defaultModules = [
-        { 
+        {
           imports = nixpkgs.lib.attrValues self.nixosModules;
           nixpkgs.pkgs = pkgs;
         }
