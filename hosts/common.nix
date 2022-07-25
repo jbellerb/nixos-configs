@@ -3,13 +3,11 @@
 with lib;
 
 {
-  system.stateVersion = "21.11";
+  system.stateVersion = "22.05";
   # system.autoUpgrade.enable = true;
 
   nix = {
-    package = pkgs.nix_2_4;
     extraOptions = "experimental-features = nix-command flakes";
-
     trustedUsers = [ "root" "@wheel" ];
 
     binaryCaches = [ "https://nix-community.cachix.org" ];
@@ -47,7 +45,7 @@ with lib;
 
     # Public key authentication only
     passwordAuthentication = false;
-    challengeResponseAuthentication = false;
+    kbdInteractiveAuthentication = false;
   };
 
   #########

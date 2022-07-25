@@ -1,8 +1,8 @@
 {
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs/nixos-21.11-small"; };
+    nixpkgs = { url = "github:nixos/nixpkgs/nixos-22.05-small"; };
     deploy-rs = { url = "github:serokell/deploy-rs"; };
-    sops-nix = { url = "github:Mic92/sops-nix?rev=85907ae7384477e447499f6e942d822d6f2998d8"; };
+    sops-nix = { url = "github:Mic92/sops-nix"; };
   };
 
   outputs = { self, nixpkgs, deploy-rs, sops-nix }:
@@ -28,8 +28,8 @@
         inherit system;
         overlays = [ self.overlays.default deployOverlay ];
       };
-    in
-    {
+
+    in {
       packages."${system}" = {
         inherit (pkgs.callPackage packages/pounce.nix {})
           pounce

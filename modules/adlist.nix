@@ -15,7 +15,7 @@ with lib;
   config = mkIf config.services.adlist.enable {
     systemd.services.adlist-refresh = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
 
       description = "Refresh the current ad-blocking hosts file.";
 
