@@ -6,6 +6,7 @@ let
 in {
   services.samba = {
     enable = true;
+    openFirewall = true;
     securityType = "user";
     extraConfig = ''
       workgroup = WORKGROUP

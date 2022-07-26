@@ -30,6 +30,4 @@
   # Firewall setting
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
-  networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedUDPPorts = [ 53 ];
 }

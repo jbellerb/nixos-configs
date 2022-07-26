@@ -8,7 +8,7 @@ let
     $ORIGIN home.
 
     @ IN SOA suez.home. suez.home. (
-           2022072401 ; serial
+           2022072502 ; serial
                 28800 ; refresh
                  7200 ; retry
                864000 ; expire
@@ -22,9 +22,13 @@ let
     shanghai.home. IN A ${hosts.shanghai.wireguard.address.ipv4}
     shanghai.home. IN AAAA ${hosts.shanghai.wireguard.address.ipv6}
     ${hosts.shanghai.wireguard.address.ipv4}.in-addr.arpa. IN PTR shanghai.home.
+
+    *.shanghai.home. CNAME shanghai.home.
   '';
 
 in {
+  networking.firewall.allowedUDPPorts = [ 53 ];
+
   users = {
     users.coredns = {
       isSystemUser = true;

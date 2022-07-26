@@ -11,6 +11,7 @@
     ./modules/docker.nix
     ./modules/git.nix
     ./modules/jellyfin.nix
+    ./modules/nginx.nix
     ./modules/pounce.nix
     ./modules/samba.nix
   ];
@@ -35,8 +36,6 @@
   # Firewall setting
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
-  networking.firewall.allowedTCPPorts = [ 80 139 445 8080 8096 ];
-  networking.firewall.allowedUDPPorts = [ 137 138 ];
 
   # Container NAT
   networking.nat.enable = true;
