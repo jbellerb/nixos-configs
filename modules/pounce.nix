@@ -271,8 +271,8 @@ in {
           "Cannot listen for notifications on ${name}: network does not exist.");
         nameValuePair "pounce-notify-${name}" {
           wantedBy = [ "multi-user.target" ];
-          requires = [ "pounce-${name}.service" ];
-          after = [ "pounce-${name}.service" ];
+          requires = [ "calico.service" ];
+          after = [ "calico.service" ];
 
           description = "Pounce notification client for the ${name} network.";
 
@@ -293,6 +293,7 @@ in {
                   pkgs.writeShellScript "pounce-notify-${name}-commands" value.commands}
             '';
             Restart = "always";
+            RestartSec = "2s";
           };
         })
       cfg.notify)
