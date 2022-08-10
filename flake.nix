@@ -1,11 +1,15 @@
 {
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs/nixos-22.05-small"; };
-    deploy-rs = { url = "github:serokell/deploy-rs"; };
-    sops-nix = { url = "github:Mic92/sops-nix"; };
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05-small";
+    deploy-rs.url = "github:serokell/deploy-rs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-22.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, deploy-rs, sops-nix }:
+  outputs = { self, nixpkgs, deploy-rs, sops-nix, home-manager }:
     let
       system = "x86_64-linux";
 
@@ -50,6 +54,16 @@
           modules = defaultModules ++ [
             hosts/suez/configuration.nix
           ];
+        };
+      };
+
+      homeConfigurations = {
+        waves = home-manager.lib.homeManagerConfiguration {
+          inherit system pkgs;
+          configuration = homes/waves/home.nix;
+          username = "waves";
+          homeDirectory = "/var/home/waves";
+          stateVersion = "22.05";
         };
       };
 

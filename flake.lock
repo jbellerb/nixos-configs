@@ -36,6 +36,27 @@
         "type": "github"
       }
     },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1656169755,
+        "narHash": "sha256-Nlnm4jeQWEGjYrE6hxi/7HYHjBSZ/E0RtjCYifnNsWk=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "4a3d01fb53f52ac83194081272795aa4612c2381",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-22.05",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1648219316,
@@ -70,11 +91,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1659768411,
-        "narHash": "sha256-qdWSM5XmXwmcDueipQC92Yi5uHZStOSzV6WhTn/Xbjs=",
+        "lastModified": 1660120254,
+        "narHash": "sha256-EMBa86JQ6W0och5Kxb1XmprgN/HFsSuJ9fRa2PtV3uk=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d96e79fce8879100731094b9a3e76234a7ddaf77",
+        "rev": "e4c9d950a3c54a0760b127d406f6528eb625eed8",
         "type": "github"
       },
       "original": {
@@ -103,6 +124,7 @@
     "root": {
       "inputs": {
         "deploy-rs": "deploy-rs",
+        "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
         "sops-nix": "sops-nix"
       }
