@@ -1,10 +1,10 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05-small";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     deploy-rs.url = "github:serokell/deploy-rs";
     sops-nix.url = "github:Mic92/sops-nix";
     home-manager = {
-      url = "github:nix-community/home-manager/release-22.05";
+      url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -59,11 +59,8 @@
 
       homeConfigurations = {
         waves = home-manager.lib.homeManagerConfiguration {
-          inherit system pkgs;
-          configuration = homes/waves/home.nix;
-          username = "waves";
-          homeDirectory = "/var/home/waves";
-          stateVersion = "22.05";
+          inherit pkgs;
+          modules = [ homes/waves/home.nix ];
         };
       };
 

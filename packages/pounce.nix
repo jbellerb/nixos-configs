@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, symlinkJoin, curl, libressl, pkg-config, sqlite }:
+{ lib, stdenv, fetchzip, symlinkJoin, curl, libressl, libxcrypt, pkg-config, sqlite }:
 
 let
   version = "3.0";
@@ -41,7 +41,7 @@ in {
 
     sourceRoot = "source";
 
-    buildInputs = [ libressl ];
+    buildInputs = [ libressl libxcrypt ];
 
     meta = with lib; {
       homepage = "https://git.causal.agency/pounce/about/";

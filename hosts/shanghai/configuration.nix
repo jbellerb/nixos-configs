@@ -22,7 +22,7 @@
 
   # Device-specific packages
   environment.systemPackages = with pkgs; [
-    bedup
+    duperemove
   ];
 
   ##############

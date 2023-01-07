@@ -4,7 +4,7 @@
   home.username = "waves";
   home.homeDirectory = "/var/home/waves";
 
-  home.stateVersion = "22.05";
+  home.stateVersion = "22.11";
 
   programs.home-manager.enable = true;
 
