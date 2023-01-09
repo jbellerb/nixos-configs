@@ -26,7 +26,7 @@ with lib;
           -p $(${pkgs.coreutils}/bin/dirname "${config.services.adlist.path}")
         ${pkgs.curl}/bin/curl \
           https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts \
-          -o "${config.services.adlist.path}"
+          -o "${config.services.adlist.path}" --retry 5
       '';
     };
 

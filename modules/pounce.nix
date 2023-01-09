@@ -228,13 +228,14 @@ in {
                 -H ${cfg.host} -P ${toString cfg.port} \
                 -t ${toString cfg.timeout} ${cfg.dataDir}
             '';
-            Restart = "always";
+            Restart = "on-failure";
           };
         };
       }
 
       (mapAttrs' (name: value: nameValuePair "pounce-${name}" {
         wantedBy = [ "calico.service" ];
+        after = [ "network.target" ];
         before = [ "calico.service" ];
 
         description = "Pounce IRC bouncer for the ${name} network.";
@@ -249,7 +250,7 @@ in {
               -U ${cfg.dataDir} -H ${name}.${cfg.host} \
               ${settingsFormat.generate "${name}.cfg" value}
           '';
-          Restart = "always";
+          Restart = "on-failure";
         };
         preStart = ''
           mkdir -p ${cfg.certDir}/${name}.${cfg.host}
@@ -271,8 +272,8 @@ in {
           "Cannot listen for notifications on ${name}: network does not exist.");
         nameValuePair "pounce-notify-${name}" {
           wantedBy = [ "multi-user.target" ];
-          requires = [ "calico.service" ];
-          after = [ "calico.service" ];
+          requires = [ "calico.service" "pounce-${name}.service" ];
+          after = [ "calico.service" "pounce-${name}.service" ];
 
           description = "Pounce notification client for the ${name} network.";
 
@@ -292,8 +293,14 @@ in {
                 ${if value.script != "" then value.script else
                   pkgs.writeShellScript "pounce-notify-${name}-commands" value.commands}
             '';
-            Restart = "always";
-            RestartSec = "2s";
+            Restart = "on-failure";
+
+            # pounce will refuse all connections before it's connected to the
+            # IRC network, but there's no easy way for systemd to know when
+            # that's happened. The best I've come up with is starting
+            # pounce-notify anyways and retrying with a fairly long delay.
+            # This value works for me, hopefully it works for you too.
+            RestartSec = "15s";
           };
         })
       cfg.notify)

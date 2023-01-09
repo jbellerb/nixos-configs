@@ -11,7 +11,7 @@ This repository is brought to you by [Mic92/dotfiles](https://github.com/Mic92/d
 #### License
 
 <sup>
-Copyright (C) Jared Beller, 2022.
+Copyright (C) Jared Beller, 2019-2023.
 </sup>
 <br />
 <sup>
