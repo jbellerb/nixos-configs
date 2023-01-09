@@ -20,6 +20,7 @@
           imports = nixpkgs.lib.attrValues self.nixosModules;
           nixpkgs.pkgs = pkgs;
         }
+        home-manager.nixosModules.home-manager
         sops-nix.nixosModules.sops
       ];
 
@@ -43,24 +44,17 @@
       overlays.default = final: prev: { } // self.packages."${system}";
 
       nixosConfigurations = {
+        lagos = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = defaultModules ++ [ hosts/lagos/configuration.nix ];
+        };
         shanghai = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = defaultModules ++ [
-            hosts/shanghai/configuration.nix
-          ];
+          modules = defaultModules ++ [ hosts/shanghai/configuration.nix ];
         };
         suez = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = defaultModules ++ [
-            hosts/suez/configuration.nix
-          ];
-        };
-      };
-
-      homeConfigurations = {
-        waves = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ homes/waves/home.nix ];
+          modules = defaultModules ++ [ hosts/suez/configuration.nix ];
         };
       };
 
@@ -70,6 +64,11 @@
 
         sshOpts = [ "-A" ];
 
+        nodes.lagos = {
+          hostname = metadata.hosts.lagos.wireguard.address.ipv6;
+          profiles.system.path =
+            deployLib.activate.nixos self.nixosConfigurations.lagos;
+        };
         nodes.suez = {
           hostname = metadata.hosts.suez.wireguard.address.ipv6;
           profiles.system.path =

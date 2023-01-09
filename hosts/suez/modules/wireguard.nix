@@ -27,7 +27,7 @@ in {
   sops.secrets.suez-wireguard-private = { };
   sops.secrets.wireguard-suez-shanghai-psk = pskSecret "shanghai";
   sops.secrets.wireguard-suez-tugboat-psk = pskSecret "unmanaged";
-  sops.secrets.wireguard-suez-lagos-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-lagos-psk = pskSecret "lagos";
   sops.secrets.wireguard-suez-paris-psk = pskSecret "unmanaged";
   sops.secrets.wireguard-suez-carrier-1-psk = pskSecret "unmanaged";
   sops.secrets.wireguard-suez-carrier-2-psk = pskSecret "unmanaged";
@@ -51,7 +51,7 @@ in {
         ${pkgs.iptables}/bin/ip6tables -t nat -D POSTROUTING -s ${hosts.suez.wireguard.address.ipv6}/64 -o eth0 -j MASQUERADE
       '';
 
-      peers = builtins.map mkPeer (with hosts; [
+      peers = map mkPeer (with hosts; [
         "shanghai"
         "tugboat"
         "lagos"

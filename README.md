@@ -1,6 +1,18 @@
 # nixos-configs
 
-This flake contains the NixOS config of my media server as well as my in-progress ports and modules. Since mid-2019 and through multiple hardware changes (including the upgrade to 64-bit), some version of this config has supported my server needs. Flakeification of all the things happened in early 2022. I'll try to keep this current with my true config, but the two will differ until I figure out what to do with private info. Secrets are managed with [sops-nix](https://github.com/Mic92/sops-nix).
+This flake contains configs for my NixOS machines and my in-progress ports and modules. Through multiple hardware changes (including the upgrade to 64-bit), some version of these configs has supported my computing needs. Flakeification of all the things happened in early 2022. I'll try to keep this current with my true config, but the two will differ until I figure out what to do with some private info. Secrets are managed with [sops-nix](https://github.com/Mic92/sops-nix).
+
+### shanghai
+
+My media server, a 2009 Dell Desktop PC. Hosts Samba, Jellyfin, an IRC bouncer, and a few misc. services still in Docker land. btrfs has only failed me once.
+
+### suez
+
+The cheapest box you can get through Amazon Lightsail. Hosts a WireGuard VPN and an ad-blocking DNS.
+
+### lagos
+
+Small partition on my laptop for Linux development. User is managed with [home-manager](https://github.com/nix-community/home-manager). bcachefs because btrfs wasn't cool enough.
 
 ## References
 
