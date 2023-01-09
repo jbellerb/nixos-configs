@@ -58,8 +58,4 @@
     extraGroups = [ "wheel" "networkmanager" ];
     passwordFile = config.sops.secrets.waves-password.path;
   };
-  home-manager = {
-    useGlobalPkgs = true;
-    users.waves = import ../../homes/waves/home.nix;
-  };
 }

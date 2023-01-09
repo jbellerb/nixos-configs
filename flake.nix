@@ -58,6 +58,13 @@
         };
       };
 
+      homeConfigurations = {
+        waves = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [ homes/waves/home.nix ];
+        };
+      };
+
       deploy = {
         sshUser = "port";
         user = "root";
@@ -68,6 +75,11 @@
           hostname = metadata.hosts.lagos.wireguard.address.ipv6;
           profiles.system.path =
             deployLib.activate.nixos self.nixosConfigurations.lagos;
+          profiles.waves = {
+            user = "waves";
+            path =
+              deployLib.activate.home-manager self.homeConfigurations.waves;
+          };
         };
         nodes.suez = {
           hostname = metadata.hosts.suez.wireguard.address.ipv6;
