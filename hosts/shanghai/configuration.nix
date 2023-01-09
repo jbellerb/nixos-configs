@@ -47,33 +47,8 @@
   sops.secrets.wireguard-suez-shanghai-psk = {
     sopsFile = ../secrets/keys/wg-suez-shanghai-psk.yaml;
   };
-  networking.wireguard.interfaces = {
-    wg0 =
-      let
-        hosts = config.metadata.hosts;
-
-      in {
-        ips = [
-          "${hosts.shanghai.wireguard.address.ipv4}/32"
-          "${hosts.shanghai.wireguard.address.ipv6}/128"
-        ];
-        privateKeyFile = config.sops.secrets.shanghai-wireguard-private.path;
-
-        peers = [
-          {
-            publicKey = hosts.suez.wireguard.publicKey;
-            presharedKeyFile = config.sops.secrets.wireguard-suez-shanghai-psk.path;
-            allowedIPs = [ # TODO: network definitions in metadata
-              "10.131.0.0/24"
-              "fd3b:fe0b:d86b:a5ec::/64"
-            ];
-            endpoint =
-              "${hosts.suez.ip_addr}:${toString hosts.suez.wireguard.port}";
-            persistentKeepalive = 25;
-          }
-        ];
-      };
-  };
+  services.wireguard.enable = true;
+  services.wireguard.keepalive = true;
 
   networking.nameservers =
     with config.metadata.hosts.suez.wireguard.address; [ ipv4 ipv6 ];
