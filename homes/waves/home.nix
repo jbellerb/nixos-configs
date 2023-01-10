@@ -22,6 +22,21 @@
     pkgs.sops
   ];
 
+  home.sessionPath = [ "$HOME/.local/bin" "$HOME/.cargo/bin" ];
+
+  programs.fish = {
+    enable = true;
+    shellInit = ''
+      set fish_greeting
+
+      set --append fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d
+    '';
+  };
+  programs.nix-index = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
   programs.helix = {
     enable = false;
     settings = {
@@ -62,6 +77,7 @@
 
   dconf.settings."com/raggesilver/BlackBox" = {
     style-preference = lib.hm.gvariant.mkUint32 2;
+    window-show-borders = false;
     theme-dark = "Everforest Dark Hard";
     theme-light = "Tomorrow";
 
@@ -69,6 +85,9 @@
     terminal-cell-height = 1.1;
     terminal-padding = lib.hm.gvariant.mkTuple
       (map lib.hm.gvariant.mkUint32 [ 5 5 5 5 ]);
+
+    use-custom-command = true;
+    custom-shell-command = "/usr/bin/env fish";
   };
   home.file.".local/share/blackbox/schemes/everforest-dark-hard.json" = {
     text = ''
