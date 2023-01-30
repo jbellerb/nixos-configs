@@ -51,11 +51,14 @@
   # CUPS
   services.printing.enable = true;
 
+  # Docker
+  virtualisation.docker.enable = true;
+
   # User
   sops.secrets.waves-password = { neededForUsers = true; };
   users.users.waves = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "docker" "networkmanager" ];
     passwordFile = config.sops.secrets.waves-password.path;
   };
 }

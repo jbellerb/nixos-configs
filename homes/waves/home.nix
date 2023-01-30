@@ -10,16 +10,24 @@
 
   home.packages = [
     pkgs.binutils
-    pkgs.blackbox-terminal
-    pkgs.cachix
-    pkgs.cargo
-    pkgs.deploy-rs
-    pkgs.firefox
     pkgs.gcc
     pkgs.gnupg
+    pkgs.protobuf
     pkgs.ripgrep
-    pkgs.rustc
+
+    # desktop
+    pkgs.blackbox-terminal
+    pkgs.firefox
+
+    # nix
+    pkgs.cachix
+    pkgs.deploy-rs
     pkgs.sops
+
+    # rust
+    pkgs.fenix.default.toolchain
+    pkgs.fenix.rust-analyzer
+    pkgs.cargo-expand
   ];
 
   home.sessionPath = [ "$HOME/.local/bin" "$HOME/.cargo/bin" ];

@@ -16,7 +16,7 @@
     };
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
-    supportedFilesystems = [ "bcachefs" ];
+    supportedFilesystems = [ "bcachefs" "ntfs" ];
   };
 
   # CPU
@@ -49,4 +49,5 @@
   powerManagement.cpuFreqGovernor = "powersave";
   hardware.video.hidpi.enable = true;
   hardware.cpu.intel.updateMicrocode = true;
+  services.fwupd.enable = true;
 }
