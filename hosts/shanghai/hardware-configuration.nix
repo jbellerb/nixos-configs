@@ -20,6 +20,7 @@
     };
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
+    kernel.sysctl = { "fs.inotify.max_user_watches" = 124866; };
   };
 
   # CPU
