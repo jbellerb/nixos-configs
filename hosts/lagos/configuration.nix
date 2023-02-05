@@ -11,7 +11,7 @@
   ];
 
   # Device-specific packages
-  environment.systemPackages = with pkgs; [ ];
+  environment.systemPackages = with pkgs; [ wl-clipboard ];
 
   # Networking
   networking.networkmanager.enable = true;
@@ -53,6 +53,14 @@
 
   # Docker
   virtualisation.docker.enable = true;
+
+  # Yubikey
+  services.pcscd.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryFlavor = "gnome3";
+    enableSSHSupport = true;
+  };
 
   # User
   sops.secrets.waves-password = { neededForUsers = true; };
