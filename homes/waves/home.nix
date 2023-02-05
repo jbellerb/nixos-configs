@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   home.username = "waves";
@@ -11,6 +11,7 @@
   home.packages = [
     pkgs.binutils
     pkgs.gcc
+    pkgs.git-filter-repo
     pkgs.gnupg
     pkgs.protobuf
     pkgs.ripgrep
@@ -44,6 +45,16 @@
     enable = true;
     enableFishIntegration = true;
   };
+
+  programs.password-store = {
+    enable = true;
+    package = pkgs.pass.withExtensions (exts: [ exts.pass-update ]);
+  };
+  programs.browserpass = {
+    enable = true;
+    browsers = [ "firefox" ];
+  };
+  systemd.user.sessionVariables = config.programs.password-store.settings;
 
   programs.helix = {
     enable = false;
@@ -97,7 +108,7 @@
     use-custom-command = true;
     custom-shell-command = "/usr/bin/env fish";
   };
-  home.file.".local/share/blackbox/schemes/everforest-dark-hard.json" = {
+  home.file."${config.xdg.dataHome}/blackbox/schemes/everforest-dark-hard.json" = {
     text = ''
       {
           "name": "Everforest Dark Hard",
