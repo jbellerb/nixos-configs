@@ -23,12 +23,13 @@ let
 
 in {
   options.services.pounce = {
-    enable = mkEnableOption "Pounce IRC bouncer with the Calico dispatcher";
+    enable = mkEnableOption
+      (lib.mdDoc "the Pounce IRC bouncer and Calico dispatcher");
 
     user = mkOption {
       type = types.str;
       default = defaultUser;
-      description = ''
+      description = lib.mdDoc ''
         User account under which Pounce runs. If not specified, a default user
         will be created.
       '';
@@ -37,7 +38,7 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "/run/pounce";
-      description = ''
+      description = lib.mdDoc ''
         Directory where each Pounce instance's UNIX-domain socket is stored for
         Calico to route to.
       '';
@@ -47,14 +48,14 @@ in {
       type = types.str;
       default = "/var/lib/pounce/certs";
       example = "/etc/letsencrypt/live";
-      description = ''
+      description = lib.mdDoc ''
         Directory where each Pounce instance's TLS certificates and private
         keys are stored. Each instance should have a folder in the certbot
-        format: a <literal>fullchain.pem</literal> and
-        <literal>privkey.pem</literal> in a folder with the full domain name of
-        the instance (ex: <literal>libera.example.org/</literal>). Self-signed
-        certificates will be generated in this folder if
-        <option>services.pounce.generateCerts</option> is true.
+        format: a {file}`fullchain.pem` and {file}`privkey.pem` in a folder
+        with the full domain name of the instance (ex:
+        {file}`libera.example.org/`). Self-signed certificates will be
+        generated in this folder if
+        {option}`services.pounce.generateCerts` is true.
       '';
     };
 
@@ -62,7 +63,7 @@ in {
       type = types.str;
       default = "localhost";
       example = "example.org";
-      description = ''
+      description = lib.mdDoc ''
         Base domain name for Calico to listen at. Each instance will be at a
         subdomain of this.
       '';
@@ -71,32 +72,32 @@ in {
     port = mkOption {
       type = types.port;
       default = 6697;
-      description = "Port for Calico to listen on.";
+      description = lib.mdDoc "Port for Calico to listen on.";
     };
 
     generateCerts = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Generate a self-signed TLS certificate in the certificate directory.
-        If you would like to use <command>certbot</command> instead, generate
+        If you would like to use {command}`certbot` instead, generate
         certificates for each instance like this:
-        <literal>certbot certonly -d libera.example.org</literal>.
+        {command}`certbot certonly -d libera.example.org`.
       '';
     };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = "Open port in the firewall for Calico.";
+      description = lib.mdDoc "Open port in the firewall for Calico.";
     };
 
     timeout = mkOption {
       type = types.ints.positive;
       default = 1000;
-      description = ''
+      description = lib.mdDoc ''
         Timeout parameter (in milliseconds) for Calico to close a connection
-        if no <literal>ClientHello</literal> message is sent.
+        if no `ClientHello` message is sent.
       '';
     };
 
@@ -111,11 +112,11 @@ in {
           join = "#nixos,#nixos-dev";
         };
       };
-      description = ''
-        Attribute set of Pounce configurations. For information on the Pounce
-        configuration format, see the
-        <link xlink:href="https://git.causal.agency/pounce/about/pounce.1">pounce(1)</link>
-        manual page.
+      description = lib.mdDoc ''
+        Attribute set of Pounce configurations. For information on what
+        options Pounce accepts, see the
+        [pounce(1)](https://git.causal.agency/pounce/about/pounce.1) manual
+        page.
       '';
     };
 
@@ -125,36 +126,36 @@ in {
           insecure = mkOption {
             type = types.bool;
             default = true;
-            description = ''
+            description = lib.mdDoc ''
               Disable certificate validation for connecting to the Pounce
-              instance. Must be <literal>true</literal> if using a
-              self-signed certificate with Pounce.
+              instance. Must be `true` if using a self-signed certificate
+              with Pounce.
             '';
           };
           client-cert = mkOption {
             type = types.str;
             default = "";
-            description = ''
+            description = lib.mdDoc ''
               Client certificate to use if Pounce is configured to require
               certificate authentication. If the relevant private key is stored
               in a separate file, load it with
-              <option>services.pounce.notify.<name>.client-priv</option>.
+              {option}`services.pounce.notify.<name>.client-priv`.
             '';
           };
           client-priv = mkOption {
             type = types.str;
             default = "";
-            description = ''
+            description = lib.mdDoc ''
               Private key to use if Pounce is configured to require certificate
               authentication. If the certificate provided in
-              <option>services.pounce.notify.<name>.client-cert</option> has
-              an embedded private key, this option can be left empty.
+              {option}`services.pounce.notify.<name>.client-cert` has an
+              embedded private key, this option can be left empty.
             '';
           };
           user = mkOption {
             type = types.str;
             default = "pounce-notify";
-            description = "Username to present to Pounce when connecting.";
+            description = lib.mdDoc "Username to present to Pounce when connecting.";
           };
           commands = mkOption {
             type = types.str;
@@ -170,7 +171,7 @@ in {
                 CONTEXT="$NOTIFY_CHANNEL"
               fi
 
-              ${pkgs.curl}/bin/curl \
+              $${pkgs.curl}/bin/curl \
                 -X POST \
                 --form-string token="API_TOKEN" \
                 --form-string user="USER_KEY" \
@@ -179,10 +180,10 @@ in {
                 --form-string message="$NOTIFY_NICK: $NOTIFY_MESSAGE" \
                 https://api.pushover.net/1/messages.json
             '';
-            description = ''
+            description = lib.mdDoc ''
               Series of commands to run when a private message or a mention
               occurs. See
-              <link xlink:href="https://git.causal.agency/pounce/about/extra/notify/pounce-notify.1">pounce-notify(1)</link>
+              [pounce-notify(1)](https://git.causal.agency/pounce/about/extra/notify/pounce-notify.1)
               for a list of environment variables containing information about
               the notification event.
             '';
@@ -191,11 +192,10 @@ in {
             type = types.str;
             default = "";
             example = "/var/lib/pounce/notify.sh";
-            description = ''
+            description = lib.mdDoc ''
               Script to run when a private message or a mention occurs.
-              Overrides
-              <option>services.pounce.notify.<name>.commands</option>. See
-              <link xlink:href="https://git.causal.agency/pounce/about/extra/notify/pounce-notify.1">pounce-notify(1)</link>
+              Overrides {option}`services.pounce.notify.<name>.commands`. See
+              [pounce-notify(1)](https://git.causal.agency/pounce/about/extra/notify/pounce-notify.1)
               for a list of environment variables containing information about
               the notification event.
             '';
@@ -203,9 +203,9 @@ in {
         };
       });
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Attribute set of notification clients to spawn. Each field must match a
-        network defined in <option>services.pounce.networks</option>.
+        network defined in {option}`services.pounce.networks`.
       '';
     };
   };
@@ -320,7 +320,7 @@ in {
   };
 
   # meta = {
-  #   doc = ./pounce.xml;
+  #   doc = ./pounce.md;
   #   maintainers = [ lib.maintainers.jbellerb ];
   # };
 }
