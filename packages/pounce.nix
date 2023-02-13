@@ -1,45 +1,28 @@
 { lib, stdenv, fetchzip, symlinkJoin, curl, libressl, libxcrypt, pkg-config, sqlite }:
 
 let
-  version = "3.0";
+  version = "3.1";
 
   src = fetchzip {
     url = "https://git.causal.agency/pounce/snapshot/pounce-${version}.tar.gz";
-    sha256 = "17vmbfr7ika6kmq9jqa3rpd4cr71arapav7hlmggnj7a9yw5b9mg";
+    sha256 = "sha256-6PGiaU5sOwqO4V2PKJgIi3kI2jXsBOldEH51D7Sx9tg=";
   };
 
-  common = { pname, sourceRoot, buildInputs, meta ? null }:
+  common = { pname, buildInputs, postConfigure ? null, meta ? null }:
     stdenv.mkDerivation {
-      inherit pname version src sourceRoot buildInputs;
+      inherit pname version src buildInputs postConfigure meta;
 
       nativeBuildInputs = [ pkg-config ];
 
       buildFlags = [ "all" ];
-
       makeFlags = [
         "PREFIX=$(out)"
       ];
-
-      inherit meta;
     };
-
-  notify = common {
-    pname = "pounce-notify";
-    sourceRoot = "source/extra/notify";
-    buildInputs = [ libressl ];
-  };
-
-  palaver = common {
-    pname = "pounce-palaver";
-    sourceRoot = "source/extra/palaver";
-    buildInputs = [ curl.dev libressl sqlite.dev ];
-  };
 
 in {
   pounce = common {
     pname = "pounce";
-
-    sourceRoot = "source";
 
     buildInputs = [ libressl libxcrypt ];
 
@@ -52,10 +35,16 @@ in {
     };
   };
 
-  pounce-extra = symlinkJoin {
-    name = "pounce-extra-${version}";
+  pounce-extra = common {
+    pname = "pounce-extra-${version}";
 
-    paths = [ notify palaver ];
+    buildInputs = [ curl.dev libressl sqlite.dev ];
+
+    # Pounce's configure script currently doesn't provide a way to only build
+    # extras so we have to do this instead.
+    postConfigure = ''
+      echo "BINS = pounce-notify pounce-palaver" >> config.mk
+    '';
 
     meta = with lib; {
       homepage = "https://git.causal.agency/pounce/about/";
