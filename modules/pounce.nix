@@ -125,11 +125,23 @@ in {
         options = {
           insecure = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = lib.mdDoc ''
               Disable certificate validation for connecting to the Pounce
-              instance. Must be `true` if using a self-signed certificate
-              with Pounce.
+              instance. Overrides
+              {option}`services.pounce.notify.<name>.trust-cert`.
+            '';
+          };
+          trust-cert = mkOption {
+            type = types.nullOr types.str;
+            default = "";
+            example = "/etc/letsencrypt/live/libera.irc.example.org/fullchain.pem";
+            description = lib.mdDoc ''
+              Pounce certificate for the pounce-notify client to trust.
+              This is required if Pounce is using a self-signed certificate.
+              If left blank, pounce-notify will use the appropriate
+              certificate in {option}`services.pounce.certDir`. Set to `null`
+              to disable certificate pinning.
             '';
           };
           client-cert = mkOption {
@@ -270,7 +282,7 @@ in {
       (mapAttrs' (name: value:
         assert (assertMsg (cfg.networks ? "${name}")
           "Cannot listen for notifications on ${name}: network does not exist.");
-        nameValuePair "pounce-notify-${name}" {
+        nameValuePair "pounce-${name}-notify" {
           wantedBy = [ "multi-user.target" ];
           requires = [ "calico.service" "pounce-${name}.service" ];
           after = [ "calico.service" "pounce-${name}.service" ];
@@ -286,12 +298,17 @@ in {
                 ${if value.insecure then "-!" else ""} \
                 ${if value.client-cert != "" then "-c ${value.client-cert}" else ""} \
                 ${if value.client-priv != "" then "-k ${value.client-priv}" else ""} \
-                -p ${toString cfg.port} -u ${value.user} \
+                -p ${toString cfg.port} \
+                ${if !value.insecure && value.trust-cert != null then
+                  if value.trust-cert == "" then
+                    "-t ${cfg.certDir}/${name}.${cfg.host}/fullchain.pem" else
+                    "-t ${value.trust-cert}" else ""} \
+                -u ${value.user} \
                 ${if cfg.networks.${name} ? local-pass
                   then "-w cfg.networks.${name}.local-pass" else ""} \
                 ${name}.${cfg.host} \
                 ${if value.script != "" then value.script else
-                  pkgs.writeShellScript "pounce-notify-${name}-commands" value.commands}
+                  pkgs.writeShellScript "pounce-${name}-notify-commands" value.commands}
             '';
             Restart = "on-failure";
 
