@@ -36,7 +36,7 @@ in {
   };
 
   pounce-extra = common {
-    pname = "pounce-extra-${version}";
+    pname = "pounce-extra";
 
     buildInputs = [ curl.dev libressl sqlite.dev ];
 
