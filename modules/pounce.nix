@@ -21,6 +21,26 @@ let
       in pkgs.writeText name (mkKeyValueList value);
   };
 
+  hardeningFlags = {
+    CapabilityBoundingSet = [ "" ];
+    NoNewPrivileges = true;
+    PrivateDevices = true;
+    PrivateMounts = true;
+    PrivateTmp = true;
+    PrivateUsers = true;
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectProc = "invisible";
+    RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+    RestrictNamespaces = true;
+    RestrictSUIDSGID = true;
+    SystemCallArchitectures = "native";
+    SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+  };
+
 in {
   options.services.pounce = {
     enable = mkEnableOption
@@ -259,7 +279,7 @@ in {
                   -t ${toString cfg.timeout} ${cfg.dataDir}
               '';
               Restart = "on-failure";
-            };
+            } // hardeningFlags;
           };
         }
       ] ++ (mapAttrsToList (name: value: mkMerge [
@@ -282,7 +302,7 @@ in {
                   ${settingsFormat.generate "${name}.cfg" value.config}
               '';
               Restart = "on-failure";
-            };
+            } // hardeningFlags;
             preStart = ''
               mkdir -p ${cfg.certDir}/${name}.${cfg.host}
 
@@ -336,7 +356,7 @@ in {
               # pounce-notify anyways and retrying with a fairly long delay.
               # This value works for me, hopefully it works for you too.
               RestartSec = "15s";
-            };
+            } // hardeningFlags;
           };
         })
       ]) cfg.networks)
