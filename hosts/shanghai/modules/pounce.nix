@@ -15,6 +15,7 @@ let
       CONTEXT="$NOTIFY_CHANNEL"
     fi
 
+    echo "sending notification to webhook..."
     ${pkgs.curl}/bin/curl \
       -H "Content-Type: application/json" \
       -d "{\"embeds\":[{\"title\":\"$TITLE | $NETWORK/$CONTEXT\",\"description\":\"$NOTIFY_TIME $NOTIFY_NICK: $NOTIFY_MESSAGE\"}]}" \
@@ -43,6 +44,7 @@ in {
           sasl-external = true;
           join = "#openbsd,#nixos";
           away = away-msg;
+          save = "/var/lib/pounce/buffer/libera";
         };
         notify.script = notify-script "libera";
       };
@@ -54,6 +56,7 @@ in {
           client-cert = config.sops.secrets.shanghai-pounce-certfp-oftc.path;
           join = "#vtluug,#vtluug-infra,#wuvt,#oftc";
           away = away-msg;
+          save = "/var/lib/pounce/buffer/oftc";
         };
         notify.script = notify-script "oftc";
       };
