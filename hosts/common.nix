@@ -22,8 +22,6 @@ with lib;
     optimise.automatic = true;
   };
 
-  metadata = import ./metadata.nix;
-
   ################
   # Localization #
   ################

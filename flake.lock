@@ -113,17 +113,17 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1673812718,
-        "narHash": "sha256-EBPsTiQgnSPxK3fDfvi1EKj1qcVNFyZIp6MlpOhlpJI=",
+        "lastModified": 1676177817,
+        "narHash": "sha256-OQnBnuKkpwkfNY31xQyfU5hNpLs1ilWt+hVY6ztEEOM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "62853fa9e0365f469b6c729862b48fd7ebad9c15",
+        "rev": "1b82144edfcd0c86486d2e07c7298f85510e7fb8",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
+        "ref": "nixos-22.11",
         "repo": "nixpkgs",
-        "rev": "62853fa9e0365f469b6c729862b48fd7ebad9c15",
         "type": "github"
       }
     },
@@ -149,7 +149,8 @@
         "fenix": "fenix",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "unstable": "unstable"
       }
     },
     "rust-analyzer-src": {
@@ -185,6 +186,22 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1676202775,
+        "narHash": "sha256-gV/RnfVZkGLHn+5rmX2GSh5aquVHpWOJw1cnpEV03tQ=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "d917136f550a8c36efb1724390c7245105f79023",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },

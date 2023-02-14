@@ -1,7 +1,7 @@
 {
   inputs = {
-    # pinning nixpkgs until https://github.com/NixOS/nixpkgs/issues/212086 is resolved
-    nixpkgs.url = "github:nixos/nixpkgs?rev=62853fa9e0365f469b6c729862b48fd7ebad9c15";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     deploy-rs.url = "github:serokell/deploy-rs";
     fenix = {
       url = "github:nix-community/fenix";
@@ -14,32 +14,35 @@
     sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, deploy-rs, fenix, home-manager, sops-nix }:
+  outputs = { self, nixpkgs, unstable, deploy-rs, fenix, home-manager, sops-nix }:
     let
       system = "x86_64-linux";
 
       metadata = import hosts/metadata.nix;
-
-      defaultModules = [
-        {
-          imports = nixpkgs.lib.attrValues self.nixosModules;
-          nixpkgs.pkgs = pkgs;
-        }
-        sops-nix.nixosModules.sops
-      ];
 
       deployOverlay = final: prev: {
         deploy-rs = deploy-rs.packages."${system}".default;
       };
       deployLib = deploy-rs.lib."${system}";
 
+      defaultOverlays = [
+        self.overlays.default
+        deployOverlay
+        fenix.overlays.default
+      ];
+
+      defaultModules = [
+        {
+          imports = nixpkgs.lib.attrValues self.nixosModules;
+          nixpkgs.overlays = defaultOverlays;
+          inherit metadata;
+        }
+        sops-nix.nixosModules.sops
+      ];
+
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [
-          self.overlays.default
-          deployOverlay
-          fenix.overlays.default
-        ];
+        overlays = defaultOverlays;
       };
 
     in {
@@ -52,7 +55,7 @@
       overlays.default = final: prev: { } // self.packages."${system}";
 
       nixosConfigurations = {
-        lagos = nixpkgs.lib.nixosSystem {
+        lagos = unstable.lib.nixosSystem {
           inherit system;
           modules = defaultModules ++ [ hosts/lagos/configuration.nix ];
         };
