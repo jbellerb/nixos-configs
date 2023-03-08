@@ -355,7 +355,7 @@ in {
               # that's happened. The best I've come up with is starting
               # pounce-notify anyways and retrying with a fairly long delay.
               # This value works for me, hopefully it works for you too.
-              RestartSec = "15s";
+              RestartSec = "30s";
             } // hardeningFlags;
           };
         })
