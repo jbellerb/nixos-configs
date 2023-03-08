@@ -26,8 +26,7 @@
     pkgs.sops
 
     # rust
-    pkgs.fenix.default.toolchain
-    pkgs.fenix.rust-analyzer
+    pkgs.fenix.stable.toolchain
     pkgs.cargo-expand
   ];
 
@@ -41,10 +40,11 @@
       set --append fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d
     '';
   };
-  programs.nix-index = {
+  programs.direnv = {
     enable = true;
-    enableFishIntegration = true;
+    config = { load_dotenv = true; };
   };
+  programs.nix-index.enable = true;
 
   programs.password-store = {
     enable = true;
