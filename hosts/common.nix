@@ -19,6 +19,7 @@ with lib;
     extraOptions = "experimental-features = nix-command flakes";
 
     gc.automatic = true;
+    gc.options = "--delete-older-than 14d";
     optimise.automatic = true;
   };
 
