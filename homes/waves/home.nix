@@ -27,6 +27,7 @@
 
     # rust
     pkgs.fenix.stable.toolchain
+    pkgs.cargo-edit
     pkgs.cargo-expand
   ];
 
