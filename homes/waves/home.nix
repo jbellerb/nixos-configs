@@ -10,6 +10,7 @@
 
   home.packages = [
     pkgs.binutils
+    (pkgs.callPackage ./packages/catgirl {})
     pkgs.gcc
     pkgs.git-filter-repo
     pkgs.gnupg

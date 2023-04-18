@@ -1,0 +1,175 @@
+diff --git a/chat.c b/chat.c
+index 39b1a93..d9e5437 100644
+--- a/chat.c
++++ b/chat.c
+@@ -226,6 +226,7 @@ int main(int argc, char *argv[]) {
+ 	setlocale(LC_CTYPE, "");
+ 
+ 	bool insecure = false;
++	bool noTls = false;
+ 	bool printCert = false;
+ 	const char *bind = NULL;
+ 	const char *host = NULL;
+@@ -242,6 +243,7 @@ int main(int argc, char *argv[]) {
+ 
+ 	struct option options[] = {
+ 		{ .val = '!', .name = "insecure", no_argument },
++		{ .val = 'X', .name = "no-tls", no_argument },
+ 		{ .val = 'C', .name = "copy", required_argument },
+ 		{ .val = 'H', .name = "hash", required_argument },
+ 		{ .val = 'I', .name = "highlight", required_argument },
+@@ -283,6 +285,7 @@ int main(int argc, char *argv[]) {
+ 	for (int opt; 0 < (opt = getopt_config(argc, argv, opts, options, NULL));) {
+ 		switch (opt) {
+ 			break; case '!': insecure = true;
++			break; case 'X': noTls = true;
+ 			break; case 'C': utilPush(&urlCopyUtil, optarg);
+ 			break; case 'H': parseHash(optarg);
+ 			break; case 'I': filterAdd(Hot, optarg);
+@@ -329,7 +332,7 @@ int main(int argc, char *argv[]) {
+ 		int error = pledge("stdio inet dns", NULL);
+ 		if (error) err(EX_OSERR, "pledge");
+ #endif
+-		ircConfig(true, NULL, NULL, NULL);
++		ircConfig(false, true, NULL, NULL, NULL);
+ 		ircConnect(bind, host, port);
+ 		ircPrintCert();
+ 		ircClose();
+@@ -376,7 +379,7 @@ int main(int argc, char *argv[]) {
+ 
+ 	inputCache();
+ 
+-	ircConfig(insecure, trust, cert, priv);
++	ircConfig(noTls, insecure, trust, cert, priv);
+ 
+ 	uiInit();
+ 	sig_t cursesWinch = signal(SIGWINCH, signalHandler);
+diff --git a/chat.h b/chat.h
+index 8086c9e..775941d 100644
+--- a/chat.h
++++ b/chat.h
+@@ -249,7 +249,8 @@ struct Message {
+ };
+ 
+ void ircConfig(
+-	bool insecure, const char *trust, const char *cert, const char *priv
++	bool noTls, bool insecure,
++	const char *trust, const char *cert, const char *priv
+ );
+ int ircConnect(const char *bind, const char *host, const char *port);
+ void ircHandshake(void);
+diff --git a/irc.c b/irc.c
+index 1fc2c3f..9a1d8bc 100644
+--- a/irc.c
++++ b/irc.c
+@@ -45,14 +45,21 @@
+ #include "chat.h"
+ 
+ static struct tls *client;
++static int sock;
+ static struct tls_config *config;
+ 
+ void ircConfig(
+-	bool insecure, const char *trust, const char *cert, const char *priv
++	bool noTls, bool insecure,
++	const char *trust, const char *cert, const char *priv
+ ) {
+ 	int error = 0;
+ 	char buf[PATH_MAX];
+ 
++	if (noTls) {
++		config = NULL;
++		return;
++	}
++
+ 	config = tls_config_new();
+ 	if (!config) errx(EX_SOFTWARE, "tls_config_new");
+ 
+@@ -107,10 +114,8 @@ void ircConfig(
+ }
+ 
+ int ircConnect(const char *bindHost, const char *host, const char *port) {
+-	assert(client);
+-
+ 	int error;
+-	int sock = -1;
++	sock = -1;
+ 	struct addrinfo *head;
+ 	struct addrinfo hints = {
+ 		.ai_family = AF_UNSPEC,
+@@ -159,13 +164,16 @@ int ircConnect(const char *bindHost, const char *host, const char *port) {
+ 	freeaddrinfo(head);
+ 
+ 	fcntl(sock, F_SETFD, FD_CLOEXEC);
+-	error = tls_connect_socket(client, sock, host);
+-	if (error) errx(EX_PROTOCOL, "tls_connect: %s", tls_error(client));
++	if (config) {
++		error = tls_connect_socket(client, sock, host);
++		if (error) errx(EX_PROTOCOL, "tls_connect: %s", tls_error(client));
++	}
+ 
+ 	return sock;
+ }
+ 
+ void ircHandshake(void) {
++	if (!config) return;
+ 	int error;
+ 	do {
+ 		error = tls_handshake(client);
+@@ -176,6 +184,7 @@ void ircHandshake(void) {
+ }
+ 
+ void ircPrintCert(void) {
++	if (!config) return;
+ 	size_t len;
+ 	ircHandshake();
+ 	const byte *pem = tls_peer_cert_chain_pem(client, &len);
+@@ -198,9 +207,14 @@ static void debug(const char *pre, const char *line) {
+ }
+ 
+ void ircSend(const char *ptr, size_t len) {
+-	assert(client);
++	if (config) assert(client);
+ 	while (len) {
+-		ssize_t ret = tls_write(client, ptr, len);
++		ssize_t ret;
++		if (config) {
++			ret = tls_write(client, ptr, len);
++		} else {
++			ret = write(sock, ptr, len);
++		}
+ 		if (ret == TLS_WANT_POLLIN || ret == TLS_WANT_POLLOUT) continue;
+ 		if (ret < 0) errx(EX_IOERR, "tls_write: %s", tls_error(client));
+ 		ptr += ret;
+@@ -284,10 +298,16 @@ void ircRecv(void) {
+ 	static char buf[MessageCap];
+ 	static size_t len = 0;
+ 
+-	assert(client);
+-	ssize_t ret = tls_read(client, &buf[len], sizeof(buf) - len);
+-	if (ret == TLS_WANT_POLLIN || ret == TLS_WANT_POLLOUT) return;
+-	if (ret < 0) errx(EX_IOERR, "tls_read: %s", tls_error(client));
++	ssize_t ret;
++	if (config) {
++		assert(client);
++		ret = tls_read(client, &buf[len], sizeof(buf) - len);
++		if (ret == TLS_WANT_POLLIN || ret == TLS_WANT_POLLOUT) return;
++		if (ret < 0) errx(EX_IOERR, "tls_read: %s", tls_error(client));
++	} else {
++		ret = read(sock, &buf[len], sizeof(buf) - len);
++		if (ret < 0) errx(EX_IOERR, "read: %s", strerror(ret));
++	}
+ 	if (!ret) errx(EX_PROTOCOL, "server closed connection");
+ 	len += ret;
+ 
+@@ -308,6 +328,8 @@ void ircRecv(void) {
+ }
+ 
+ void ircClose(void) {
+-	tls_close(client);
+-	tls_free(client);
++	if (config) {
++		tls_close(client);
++		tls_free(client);
++	}
+ }
