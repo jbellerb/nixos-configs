@@ -14,6 +14,7 @@
     pkgs.gcc
     pkgs.git-filter-repo
     pkgs.gnupg
+    pkgs.libnotify
     pkgs.protobuf
     pkgs.ripgrep
 
