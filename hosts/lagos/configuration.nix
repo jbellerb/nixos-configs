@@ -51,8 +51,8 @@
   # CUPS
   services.printing.enable = true;
 
-  # Docker
-  virtualisation.docker.enable = true;
+  # Podman
+  virtualisation.podman.enable = true;
 
   # Yubikey
   services.pcscd.enable = true;
