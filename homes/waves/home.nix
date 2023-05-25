@@ -17,6 +17,7 @@
     pkgs.libnotify
     pkgs.protobuf
     pkgs.ripgrep
+    pkgs.toolbox
 
     # desktop
     pkgs.blackbox-terminal
@@ -60,7 +61,7 @@
   systemd.user.sessionVariables = config.programs.password-store.settings;
 
   programs.helix = {
-    enable = false;
+    enable = true;
     settings = {
       theme = "everforest_dark";
       editor = {
