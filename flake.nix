@@ -8,8 +8,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-22.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "unstable";
     };
     sops-nix.url = "github:Mic92/sops-nix";
   };
@@ -71,7 +71,10 @@
 
       homeConfigurations = {
         waves = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+          pkgs = import unstable {
+            inherit system;
+            overlays = defaultOverlays;
+          };
           modules = [ homes/waves/home.nix ];
         };
       };
