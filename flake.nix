@@ -1,20 +1,19 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
-    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     deploy-rs.url = "github:serokell/deploy-rs";
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "unstable";
+      url = "github:nix-community/home-manager/release-23.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, unstable, deploy-rs, fenix, home-manager, sops-nix }:
+  outputs = { self, nixpkgs, deploy-rs, fenix, home-manager, sops-nix }:
     let
       system = "x86_64-linux";
 
@@ -34,6 +33,7 @@
       defaultModules = [
         {
           imports = nixpkgs.lib.attrValues self.nixosModules;
+          system.stateVersion = "23.05";
           nixpkgs.overlays = defaultOverlays;
           inherit metadata;
         }
@@ -55,7 +55,7 @@
       overlays.default = final: prev: { } // self.packages."${system}";
 
       nixosConfigurations = {
-        lagos = unstable.lib.nixosSystem {
+        lagos = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = defaultModules ++ [ hosts/lagos/configuration.nix ];
         };
@@ -71,10 +71,7 @@
 
       homeConfigurations = {
         waves = home-manager.lib.homeManagerConfiguration {
-          pkgs = import unstable {
-            inherit system;
-            overlays = defaultOverlays;
-          };
+          inherit pkgs;
           modules = [ homes/waves/home.nix ];
         };
       };

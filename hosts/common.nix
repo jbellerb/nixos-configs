@@ -3,7 +3,6 @@
 with lib;
 
 {
-  system.stateVersion = "22.11";
   # system.autoUpgrade.enable = true;
 
   nix = {
@@ -46,8 +45,10 @@ with lib;
     enable = true;
 
     # Public key authentication only
-    passwordAuthentication = false;
-    kbdInteractiveAuthentication = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
 
   #########

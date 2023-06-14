@@ -46,7 +46,7 @@
 
   boot.loader.grub.device = "/dev/sda";
 
-  boot.tmpOnTmpfs = true;
+  boot.tmp.useTmpfs = true;
 
   swapDevices = [
     { device = "/dev/disk/by-uuid/782c7ab9-f15d-4cbe-8bc5-ff415dd68841"; }
@@ -60,24 +60,22 @@
 
   services.snapper.configs =
     let
-      schedule = ''
-        TIMELINE_CREATE="yes"
-        TIMELINE_CLEANUP="yes"
-        TIMELINE_LIMIT_HOURLY="12"
-        TIMELINE_LIMIT_DAILY="7"
-        TIMELINE_LIMIT_WEEKLY="4"
-        TIMELINE_LIMIT_MONTHLY="6"
-        TIMELINE_LIMIT_YEARLY="0"
-      '';
+      schedule = {
+        TIMELINE_CREATE = true;
+        TIMELINE_CLEANUP = true;
+        TIMELINE_LIMIT_HOURLY = 12;
+        TIMELINE_LIMIT_DAILY = 7;
+        TIMELINE_LIMIT_WEEKLY = 4;
+        TIMELINE_LIMIT_MONTHLY = 6;
+        TIMELINE_LIMIT_YEARLY = 0;
+      };
 
     in {
       "root" = {
-        subvolume = "/";
-        extraConfig = schedule;
-      };
+        SUBVOLUME = "/";
+      } // schedule;
       "home" = {
-        subvolume = "/home";
-        extraConfig = schedule;
-      };
+        SUBVOLUME = "/home";
+      } // schedule;
     };
 }

@@ -27,7 +27,7 @@
 
   boot.loader.grub.device = "/dev/xvda";
 
-  boot.tmpOnTmpfs = true;
+  boot.tmp.useTmpfs = true;
 
   swapDevices = [ { device = "/var/swapfile"; size = 2048; } ];
 
