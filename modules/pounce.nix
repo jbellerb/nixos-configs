@@ -301,6 +301,13 @@ in {
                   -U ${cfg.dataDir} -H ${name}.${cfg.host} \
                   ${settingsFormat.generate "${name}.cfg" value.config}
               '';
+              ExecStartPost = ''
+                ${pkgs.coreutils}/bin/timeout 30 ${pkgs.runtimeShell} -c ' \
+                  while ! echo | ${pkgs.libressl.nc}/bin/nc \
+                    -U ${cfg.dataDir}/${name}.${cfg.host}; \
+                    do sleep 1; \
+                  done'
+              '';
               Restart = "on-failure";
             } // hardeningFlags;
             preStart = ''
@@ -349,13 +356,6 @@ in {
                      pkgs.writeShellScript "pounce-${name}-notify-script" value.notify.script}
               '';
               Restart = "on-failure";
-
-              # pounce will refuse all connections before it's connected to the
-              # IRC network, but there's no easy way for systemd to know when
-              # that's happened. The best I've come up with is starting
-              # pounce-notify anyways and retrying with a fairly long delay.
-              # This value works for me, hopefully it works for you too.
-              RestartSec = "30s";
             } // hardeningFlags;
           };
         })
