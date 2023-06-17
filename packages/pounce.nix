@@ -20,6 +20,8 @@ let
       ];
     };
 
+    curlLibreSSL = curl.override { openssl = libressl; };
+
 in {
   pounce = common {
     pname = "pounce";
@@ -38,7 +40,7 @@ in {
   pounce-extra = common {
     pname = "pounce-extra";
 
-    buildInputs = [ curl.dev libressl sqlite.dev ];
+    buildInputs = [ curlLibreSSL.dev libressl sqlite.dev ];
 
     # Pounce's configure script currently doesn't provide a way to only build
     # extras so we have to do this instead.
