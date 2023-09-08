@@ -43,6 +43,8 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = defaultOverlays;
+        config.allowUnfreePredicate = pkg:
+          builtins.elem (nixpkgs.lib.getName pkg) [ "Dirt-Samples" ];
       };
 
     in {
@@ -50,6 +52,10 @@
         inherit (pkgs.callPackage packages/pounce.nix {})
           pounce
           pounce-extra;
+        inherit (pkgs.callPackage packages/superdirt.nix {})
+          vowel
+          dirt-samples
+          superdirt;
       };
 
       overlays.default = final: prev: { } // self.packages."${system}";

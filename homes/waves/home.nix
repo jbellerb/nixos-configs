@@ -32,6 +32,9 @@
     pkgs.fenix.stable.toolchain
     pkgs.cargo-edit
     pkgs.cargo-expand
+
+    # tidal
+    pkgs.supercollider-with-sc3-plugins
   ];
 
   home.sessionPath = [ "$HOME/.local/bin" "$HOME/.cargo/bin" ];
@@ -140,5 +143,16 @@
           ]
       }
     '';
+  };
+
+  xdg.configFile."SuperCollider/sclang_conf.yaml" = {
+    text = lib.generators.toYAML {} ({
+      includePaths = lib.concatMap
+        (quark: [ "${quark}/quark" ] ++
+          lib.splitString "\n"
+            (lib.removeSuffix "\n" (builtins.readFile "${quark}/quark-deps"))
+        )
+        [ pkgs.superdirt ];
+    });
   };
 }
