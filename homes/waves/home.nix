@@ -147,11 +147,7 @@
 
   xdg.configFile."SuperCollider/sclang_conf.yaml" = {
     text = lib.generators.toYAML {} ({
-      includePaths = lib.concatMap
-        (quark: [ "${quark}/quark" ] ++
-          lib.splitString "\n"
-            (lib.removeSuffix "\n" (builtins.readFile "${quark}/quark-deps"))
-        )
+      includePaths = lib.concatMap (quark: [ "${quark}/quark" ])
         [ pkgs.superdirt ];
     });
   };

@@ -12,23 +12,19 @@ let
       inherit pname version src meta;
 
       installPhase = ''
-        mkdir -p "$out/quark"
-        cp -r ./* "$out/quark"
+        mkdir -p "$out/quark/${pname}"
+        cp -r ./* "$out/quark/${pname}"
 
         if [ -n "${toString (runtimeDeps != [])}" ]
         then
           for dep in ${lib.concatMapStringsSep " " toString runtimeDeps}
           do
-            if [ -f "$dep/quark-deps" ]; then
-              cat "$dep/quark-deps" >> "$out/quark-deps"
-            fi
             if [ -d "$dep/quark" ]; then
-              echo "$dep/quark" >> "$out/quark-deps"
+              ln -s $(readlink -f "$dep/quark"/*) "$out/quark"
             else
               echo "Dependency \"$dep\" is not a Quark" && false
             fi
           done
-          sort -u -o "$out/quark-deps" "$out/quark-deps"
         fi
       '';
     };
