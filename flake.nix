@@ -56,6 +56,7 @@
           vowel
           dirt-samples
           superdirt;
+        vim-tidal = pkgs.callPackage packages/vim-tidal.nix {};
       };
 
       overlays.default = final: prev: { } // self.packages."${system}";

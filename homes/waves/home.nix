@@ -80,9 +80,15 @@
       pkgs.vimPlugins.vim-sensible
       pkgs.vimPlugins.lightline-vim
       pkgs.vimPlugins.everforest
+
+      pkgs.vim-tidal
+
+      pkgs.vimPlugins.goyo-vim
+      pkgs.vimPlugins.limelight-vim
     ];
     settings = {
       background = "dark";
+      number = true;
 
       tabstop = 4;
       shiftwidth = 4;
@@ -97,6 +103,15 @@
 
       colorscheme everforest
       let g:lightline = {'colorscheme' : 'everforest'}
+
+      let g:tidal_ghci = '${pkgs.haskellPackages.ghcWithPackages (pkgs: [ pkgs.tidal ])}/bin/ghci'
+      let maplocalleader=","
+
+      let g:goyo_linenr = 1
+      autocmd! User GoyoEnter Limelight
+      autocmd! User GoyoEnter set vb
+      autocmd! User GoyoLeave Limelight!
+      autocmd! User GoyoLeave set novb
     '';
   };
   home.sessionVariables.EDITOR = "vim";
