@@ -5,6 +5,7 @@
     ephemeral = true;
     autoStart = true;
     config = { pkgs, ... }: {
+      system.stateVersion = "23.11";
       networking.nameservers = [ "1.1.1.1" ];
       services.jellyfin = {
         enable = true;
