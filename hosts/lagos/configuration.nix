@@ -68,6 +68,6 @@
   users.users.waves = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "networkmanager" ];
-    passwordFile = config.sops.secrets.waves-password.path;
+    hashedPasswordFile = config.sops.secrets.waves-password.path;
   };
 }

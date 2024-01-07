@@ -1,4 +1,4 @@
-{ lib, modulesPath, ... }:
+{ lib, pkgs, modulesPath, ... }:
 
 {
   imports = [ "${modulesPath}/installer/scan/not-detected.nix" ];
@@ -15,6 +15,7 @@
       kernelModules = [ ];
     };
     kernelModules = [ "kvm-intel" ];
+    kernelPackages = pkgs.linuxPackages_testing;
     extraModulePackages = [ ];
     supportedFilesystems = [ "bcachefs" "ntfs" ];
   };

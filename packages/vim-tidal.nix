@@ -3,7 +3,7 @@
 let
   version = "e440fe5bdfe07f805e21e6872099685d38e8b761";
 
-in vimUtils.buildVimPluginFrom2Nix {
+in vimUtils.buildVimPlugin {
   pname = "vim-tidal";
   inherit version;
 

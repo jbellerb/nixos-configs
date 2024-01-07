@@ -21,7 +21,6 @@
 
     # desktop
     pkgs.blackbox-terminal
-    pkgs.firefox
 
     # nix
     pkgs.cachix
@@ -52,6 +51,8 @@
     config = { load_dotenv = true; };
   };
   programs.nix-index.enable = true;
+
+  programs.firefox.enable = true;
 
   programs.password-store = {
     enable = true;

@@ -63,7 +63,7 @@ with lib;
     isNormalUser = true;
     uid = 1000;
     extraGroups = [ "wheel" ];
-    passwordFile = config.sops.secrets.port-password.path;
+    hashedPasswordFile = config.sops.secrets.port-password.path;
     openssh.authorizedKeys.keys = with config.metadata.hosts; [
       lagos.ssh_pubkey
       tugboat.ssh_pubkey
@@ -88,4 +88,6 @@ with lib;
     htop
     tmux
   ];
+
+  programs.nano.enable = false;
 }
