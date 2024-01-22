@@ -28,7 +28,11 @@
     pkgs.sops
 
     # rust
-    pkgs.fenix.stable.toolchain
+    (pkgs.fenix.combine [
+      pkgs.fenix.default.toolchain
+      pkgs.fenix.latest.rust-src
+    ])
+    pkgs.fenix.rust-analyzer
     pkgs.cargo-edit
     pkgs.cargo-expand
 
