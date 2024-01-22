@@ -33,6 +33,7 @@ in {
   sops.secrets.wireguard-suez-carrier-2-psk = pskSecret "unmanaged";
   sops.secrets.wireguard-suez-carrier-3-psk = pskSecret "unmanaged";
   sops.secrets.wireguard-suez-carrier-4-psk = pskSecret "unmanaged";
+  sops.secrets.wireguard-suez-carrier-5-psk = pskSecret "unmanaged";
   networking.wireguard.interfaces = {
     wg0 = {
       ips = [
@@ -60,6 +61,7 @@ in {
         "carrier-2"
         "carrier-3"
         "carrier-4"
+        "carrier-5"
       ]);
     };
   };

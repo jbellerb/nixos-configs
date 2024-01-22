@@ -66,4 +66,9 @@
     address.ipv6 = "fd3b:fe0b:d86b:a5ec::9";
     publicKey = "0M0j8DZtcsW2959yQIMIzgKjUZR8PJTBDM9dlefESQw=";
   };
+  hosts.carrier-5.wireguard = {
+    address.ipv4 = "10.131.0.10";
+    address.ipv6 = "fd3b:fe0b:d86b:a5ec::10";
+    publicKey = "dI3tFmc1D/6lr1krIA9WLSHzVO5BHMxbaTQ1gjnDQXQ=";
+  };
 }
