@@ -44,7 +44,7 @@
         inherit system;
         overlays = defaultOverlays;
         config.allowUnfreePredicate = pkg:
-          builtins.elem (nixpkgs.lib.getName pkg) [ "Dirt-Samples" ];
+          builtins.elem (nixpkgs.lib.getName pkg) [ "Dirt-Samples" "discord" ];
       };
 
     in {
