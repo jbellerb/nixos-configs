@@ -15,7 +15,7 @@
       kernelModules = [ ];
     };
     kernelModules = [ "kvm-intel" ];
-    kernelPackages = pkgs.linuxPackages_testing;
+    kernelPackages = pkgs.linuxPackages_latest;
     extraModulePackages = [ ];
     supportedFilesystems = [ "bcachefs" "ntfs" ];
   };
