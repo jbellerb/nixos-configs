@@ -302,7 +302,7 @@ in {
                   ${settingsFormat.generate "${name}.cfg" value.config}
               '';
               ExecStartPost = ''
-                ${pkgs.coreutils}/bin/timeout 30 ${pkgs.runtimeShell} -c ' \
+                ${pkgs.runtimeShell} -c ' \
                   while ! echo | ${pkgs.libressl.nc}/bin/nc \
                     -U ${cfg.dataDir}/${name}.${cfg.host}; \
                     do sleep 1; \
