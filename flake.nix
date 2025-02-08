@@ -17,6 +17,9 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
     };
   };
 
@@ -35,6 +38,7 @@
         self.overlays.default
         deployOverlay
         inputs.fenix.overlays.default
+        inputs.ghostty.overlays.default
       ];
 
       defaultModules = [

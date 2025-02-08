@@ -22,6 +22,7 @@
     # desktop
     pkgs.blackbox-terminal
     pkgs.discord
+    pkgs.ghostty
 
     # nix
     pkgs.cachix
