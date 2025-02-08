@@ -16,31 +16,23 @@
     ./modules/samba.nix
   ];
 
-  ########################
-  # Device configuration #
-  ########################
-
   # Device-specific packages
-  environment.systemPackages = with pkgs; [
-    duperemove
-  ];
+  environment.systemPackages = with pkgs; [ duperemove ];
 
-  ##############
-  # Networking #
-  ##############
-
-  # DHCP
+  # Networking
   networking.useDHCP = false;
   networking.interfaces.enp3s0.useDHCP = true;
 
-  # Firewall setting
+  # Container NAT
+  networking.nat = {
+    enable = true;
+    externalInterface = "enp3s0";
+    internalInterfaces = [ "ve-+" ];
+  };
+
+  # Firewall
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
-
-  # Container NAT
-  networking.nat.enable = true;
-  networking.nat.externalInterface = "enp3s0";
-  networking.nat.internalInterfaces = [ "ve-+" ];
 
   # VPN
   sops.secrets.shanghai-wireguard-private = { };
@@ -49,7 +41,6 @@
   };
   services.wireguard.enable = true;
   services.wireguard.keepalive = true;
-
   networking.nameservers =
     with config.metadata.hosts.suez.wireguard.address; [ ipv4 ipv6 ];
 }

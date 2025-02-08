@@ -10,25 +10,25 @@
       services.jellyfin = {
         enable = true;
         openFirewall = true;
-        package = pkgs.jellyfin.overrideAttrs (old: {
-          patches = old.patches ++ [
+        package = pkgs.jellyfin.overrideAttrs (prev: {
+          patches = (prev.patches or []) ++ [
             (pkgs.writeText "playlists.patch" ''
-              index 828ecb2c5..df68a7790 100644
-              --- a/MediaBrowser.Controller/Playlists/Playlist.cs
-              +++ b/MediaBrowser.Controller/Playlists/Playlist.cs
-              @@ -24,11 +24,7 @@ namespace MediaBrowser.Controller.Playlists
-                   {
-                       public static readonly IReadOnlyList<string> SupportedExtensions = new[]
-                       {
-              -            ".m3u",
-              -            ".m3u8",
-              -            ".pls",
-              -            ".wpl",
-              -            ".zpl"
-              +            ".none"
-                       };
+            index 45aefacf6..569a82fb9 100644
+            --- a/MediaBrowser.Controller/Playlists/Playlist.cs
+            +++ b/MediaBrowser.Controller/Playlists/Playlist.cs
+            @@ -23,11 +23,7 @@ namespace MediaBrowser.Controller.Playlists
+                 {
+                     public static readonly IReadOnlyList<string> SupportedExtensions =
+                     [
+            -            ".m3u",
+            -            ".m3u8",
+            -            ".pls",
+            -            ".wpl",
+            -            ".zpl"
+            +            ".none"
+                     ];
 
-                       public Playlist()
+                     public Playlist()
             '')
           ];
         });

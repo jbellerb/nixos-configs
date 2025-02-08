@@ -1,33 +1,40 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
-    deploy-rs.url = "github:serokell/deploy-rs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, deploy-rs, fenix, home-manager, sops-nix }:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       system = "x86_64-linux";
 
       metadata = import hosts/metadata.nix;
 
       deployOverlay = final: prev: {
-        deploy-rs = deploy-rs.packages."${system}".default;
+        deploy-rs = inputs.deploy-rs.packages."${system}".default;
       };
-      deployLib = deploy-rs.lib."${system}";
+      deployLib = inputs.deploy-rs.lib."${system}";
 
       defaultOverlays = [
         self.overlays.default
         deployOverlay
-        fenix.overlays.default
+        inputs.fenix.overlays.default
       ];
 
       defaultModules = [
@@ -37,7 +44,7 @@
           nixpkgs.overlays = defaultOverlays;
           inherit metadata;
         }
-        sops-nix.nixosModules.sops
+        inputs.sops-nix.nixosModules.sops
       ];
 
       pkgs = import nixpkgs {

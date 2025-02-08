@@ -43,14 +43,13 @@
       "/home/.snapshots" = mkSubvol "@snapshots/home_snaps";
       "/var/btrfs_root" = mkSubvol "/";
     };
-
-  boot.loader.grub.device = "/dev/sda";
-
   boot.tmp.useTmpfs = true;
-
   swapDevices = [
     { device = "/dev/disk/by-uuid/782c7ab9-f15d-4cbe-8bc5-ff415dd68841"; }
   ];
+
+  # Bootloader
+  boot.loader.grub.device = "/dev/sda";
 
   # Drive maintenence
   services.btrfs.autoScrub = {
@@ -71,11 +70,7 @@
       };
 
     in {
-      "root" = {
-        SUBVOLUME = "/";
-      } // schedule;
-      "home" = {
-        SUBVOLUME = "/home";
-      } // schedule;
+      "root" = { SUBVOLUME = "/"; } // schedule;
+      "home" = { SUBVOLUME = "/home"; } // schedule;
     };
 }

@@ -29,15 +29,14 @@
   services.xserver = {
     enable = true;
 
-    layout = "us";
-    libinput.enable = true;
+    xkb.layout = "us";
 
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
   };
+  services.libinput.enable = true;
 
   # Sound
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -59,7 +58,7 @@
   services.pcscd.enable = true;
   programs.gnupg.agent = {
     enable = true;
-    pinentryFlavor = "gnome3";
+    pinentryPackage = pkgs.pinentry-gnome3;
     enableSSHSupport = true;
   };
 

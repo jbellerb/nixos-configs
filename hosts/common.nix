@@ -72,7 +72,7 @@ with lib;
 
   users.mutableUsers = false;
 
-  security.pam.enableSSHAgentAuth = true;
+  security.pam.sshAgentAuth.enable = true;
   security.sudo.extraConfig = ''
     %wheel ALL= NOPASSWD:${pkgs.rsync}/bin/rsync
   '';

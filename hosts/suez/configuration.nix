@@ -12,22 +12,14 @@
     ./modules/wireguard.nix
   ];
 
-  ########################
-  # Device configuration #
-  ########################
-
   # Device-specific packages
   environment.systemPackages = with pkgs; [ ];
 
-  ##############
-  # Networking #
-  ##############
-
-  # DHCP
+  # Networking
   networking.useDHCP = false;
   networking.interfaces.eth0.useDHCP = true;
 
-  # Firewall setting
+  # Firewall
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
 }

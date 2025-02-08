@@ -7,19 +7,20 @@ in {
   services.samba = {
     enable = true;
     openFirewall = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = Samba %v on %L
-      netbios name = shanghai
-      #use sendfile = yes
-      #max protocol = smb2
-      hosts allow = 192.168.1.0/24 10.131.0.0/24 localhost
-      hosts deny = 0.0.0.0/0
-      guest account = nobody
-      map to guest = bad user
-    '';
-    shares = lib.listToAttrs
+    settings = {
+      global = {
+        "workgroup" = "WORKGROUP";
+        "server string" = "Samba %v on %L";
+        "netbios name" = "shanghai";
+        "security type" = "user";
+        # "use sendfile" = "yes";
+        # "max protocol" = "smb2";
+        "hosts allow" = "192.168.1.0/24 10.131.0.0/24 localhost";
+        "hosts deny" = "0.0.0.0/0";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+      };
+    } // lib.listToAttrs
       (map (n: lib.nameValuePair n {
         path = "/home/shares/${n}";
         browseable = "no";

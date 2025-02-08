@@ -24,12 +24,12 @@
     device = "/dev/disk/by-uuid/9451d968-8716-47ca-84d5-68b5c79f61e8";
     fsType = "ext4";
   };
-
-  boot.loader.grub.device = "/dev/xvda";
-
   boot.tmp.useTmpfs = true;
-
   swapDevices = [ { device = "/var/swapfile"; size = 2048; } ];
 
+  # Bootloader
+  boot.loader.grub.device = "/dev/xvda";
+
+  # Firmware
   hardware.cpu.intel.updateMicrocode = true;
 }

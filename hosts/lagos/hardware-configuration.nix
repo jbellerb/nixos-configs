@@ -1,4 +1,4 @@
-{ lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 {
   imports = [ "${modulesPath}/installer/scan/not-detected.nix" ];
@@ -12,12 +12,16 @@
         "usb_storage"
         "sd_mod"
       ];
-      kernelModules = [ ];
+      kernelModules = [ "i915" ];
     };
     kernelModules = [ "kvm-intel" ];
+    blacklistedKernelModules = [ "ntfs3" ];
     kernelPackages = pkgs.linuxPackages_latest;
     extraModulePackages = [ ];
-    supportedFilesystems = [ "bcachefs" "ntfs" ];
+    supportedFilesystems = {
+      bcachefs = true;
+      ntfs-3g = true;
+    };
   };
 
   # CPU
@@ -38,17 +42,25 @@
       fsType = "vfat";
     };
   };
+  boot.tmp.useTmpfs = true;
+  swapDevices = [ ];
 
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-  boot.tmp.useTmpfs = true;
+  # Laptop
+  services.throttled.enable = true;
+  services.fstrim.enable = true;
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.emulateWheel = true;
 
-  swapDevices = [ ];
+  # GPU
+  hardware.graphics.extraPackages =
+    with pkgs; [ intel-media-driver intel-compute-runtime vpl-gpu-rt ];
 
-  powerManagement.cpuFreqGovernor = "powersave";
+  # Firmware
   hardware.cpu.intel.updateMicrocode = true;
   services.fwupd.enable = true;
-  services.throttled.enable = true;
 }
