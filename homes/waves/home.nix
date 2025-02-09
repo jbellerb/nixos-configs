@@ -11,9 +11,9 @@
   home.packages = [
     pkgs.binutils
     (pkgs.callPackage ./packages/catgirl {})
+    pkgs.cmake
     pkgs.gcc
     pkgs.git-filter-repo
-    pkgs.gnupg
     pkgs.libnotify
     pkgs.protobuf
     pkgs.ripgrep
@@ -26,8 +26,6 @@
 
     # nix
     pkgs.cachix
-    pkgs.deploy-rs
-    pkgs.sops
 
     # rust
     (pkgs.fenix.combine [
@@ -55,11 +53,13 @@
   programs.direnv = {
     enable = true;
     config = { load_dotenv = true; };
+    nix-direnv.enable = true;
   };
   programs.nix-index.enable = true;
 
   programs.firefox.enable = true;
 
+  programs.gpg.enable = true;
   programs.password-store = {
     enable = true;
     package = pkgs.pass.withExtensions (exts: [ exts.pass-update ]);
