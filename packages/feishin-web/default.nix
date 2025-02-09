@@ -1,9 +1,15 @@
-{ lib, fetchFromGitHub, buildNpmPackage, imagemagick }:
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  imagemagick,
+}:
 
 let
   version = "0.12.2";
 
-in buildNpmPackage {
+in
+buildNpmPackage {
   pname = "feishin-web";
   inherit version;
 
@@ -19,7 +25,10 @@ in buildNpmPackage {
   npmDepsHash = "sha256-KZsxKDAQ7UTnEemr6S9rqKtqPeTvqrhfxURSGTKkMMM=";
 
   makeCacheWritable = true;
-  npmFlags = [ "--legacy-peer-deps" "--ignore-scripts" ];
+  npmFlags = [
+    "--legacy-peer-deps"
+    "--ignore-scripts"
+  ];
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   configurePhase = ''

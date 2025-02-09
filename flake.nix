@@ -5,6 +5,10 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,7 +27,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
     let
       system = "x86_64-linux";
 
@@ -54,21 +64,47 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = defaultOverlays;
-        config.allowUnfreePredicate = pkg:
-          builtins.elem (nixpkgs.lib.getName pkg) [ "Dirt-Samples" "discord" ];
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (nixpkgs.lib.getName pkg) [
+            "Dirt-Samples"
+            "discord"
+          ];
       };
 
-    in {
+      treefmt = inputs.treefmt-nix.lib.evalModule pkgs (
+        { pkgs, ... }:
+        {
+          projectRootFile = "flake.nix";
+          programs = {
+            nixfmt.enable = true;
+            yamlfmt = {
+              enable = true;
+              settings.formatter.indent = 4;
+            };
+          };
+          settings.global.excludes = [
+            ".envrc"
+            "LICENSE"
+            "README.md"
+          ];
+        }
+      );
+
+    in
+    {
       packages."${system}" = {
-        inherit (pkgs.callPackage packages/pounce.nix {})
+        inherit (pkgs.callPackage packages/pounce.nix { })
           pounce
-          pounce-extra;
-        feishin-web = pkgs.callPackage packages/feishin-web/default.nix {};
-        inherit (pkgs.callPackage packages/supercollider-quarks.nix {})
+          pounce-extra
+          ;
+        feishin-web = pkgs.callPackage packages/feishin-web/default.nix { };
+        inherit (pkgs.callPackage packages/supercollider-quarks.nix { })
           vowel
           dirt-samples
-          superdirt;
-        vim-tidal = pkgs.callPackage packages/vim-tidal.nix {};
+          superdirt
+          ;
+        vim-tidal = pkgs.callPackage packages/vim-tidal.nix { };
       };
 
       overlays.default = final: prev: { } // self.packages."${system}";
@@ -103,23 +139,19 @@
 
         nodes.lagos = {
           hostname = metadata.hosts.lagos.wireguard.address.ipv6;
-          profiles.system.path =
-            deployLib.activate.nixos self.nixosConfigurations.lagos;
+          profiles.system.path = deployLib.activate.nixos self.nixosConfigurations.lagos;
           profiles.waves = {
             user = "waves";
-            path =
-              deployLib.activate.home-manager self.homeConfigurations.waves;
+            path = deployLib.activate.home-manager self.homeConfigurations.waves;
           };
         };
         nodes.suez = {
           hostname = metadata.hosts.suez.wireguard.address.ipv6;
-          profiles.system.path =
-            deployLib.activate.nixos self.nixosConfigurations.suez;
+          profiles.system.path = deployLib.activate.nixos self.nixosConfigurations.suez;
         };
         nodes.shanghai = {
           hostname = metadata.hosts.shanghai.wireguard.address.ipv6;
-          profiles.system.path =
-            deployLib.activate.nixos self.nixosConfigurations.shanghai;
+          profiles.system.path = deployLib.activate.nixos self.nixosConfigurations.shanghai;
         };
       };
 
@@ -138,6 +170,10 @@
         ];
       };
 
-      checks."${system}" = { } // (deployLib.deployChecks self.deploy);
+      formatter."${system}" = treefmt.config.build.wrapper;
+
+      checks."${system}" = {
+        formatting = treefmt.config.build.check self;
+      } // (deployLib.deployChecks self.deploy);
     };
 }

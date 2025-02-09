@@ -1,7 +1,11 @@
 { config, pkgs, ... }:
 
 {
-  networking.firewall.allowedTCPPorts = [ 80 443 8080 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+    8080
+  ];
 
   services.nginx = rec {
     enable = true;
@@ -19,9 +23,7 @@
             root = "${pkgs.feishin-web}/lib/feishin/dist/";
           };
           "/api/" = {
-            proxyPass = "http://${
-              builtins.head config.services.gonic.settings.listen-addr
-            }/";
+            proxyPass = "http://${builtins.head config.services.gonic.settings.listen-addr}/";
             extraConfig = "proxy_set_header X-Forwarded-Host $host;";
           };
           "=/settings.js" =
@@ -38,7 +40,10 @@
                 '';
                 destination = "/settings.js";
               };
-            in { root = "${settings}/"; };
+            in
+            {
+              root = "${settings}/";
+            };
         };
       };
       "*.shanghai.home" = {
@@ -69,13 +74,16 @@
                 '';
                 destination = "/settings.js";
               };
-            in { root = "${settings}/"; };
+            in
+            {
+              root = "${settings}/";
+            };
         };
       };
     };
   };
 
-  sops.secrets.cloudflare-dns-api-token = { owner = "nginx"; };
+  sops.secrets.cloudflare-dns-api-token.owner = "nginx";
   security.acme = {
     acceptTerms = true;
     # defaults.dnsResolver = "1.1.1.1:53";

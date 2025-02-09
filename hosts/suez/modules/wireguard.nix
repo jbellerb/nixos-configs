@@ -16,7 +16,8 @@ let
     sopsFile = ../../secrets/keys + "/wg-suez-${peerClass}-psk.yaml";
   };
 
-in {
+in
+{
   networking.firewall.allowedUDPPorts = [ hosts.suez.wireguard.port ];
 
   networking.nat.enable = true;
@@ -52,17 +53,20 @@ in {
         ${pkgs.iptables}/bin/ip6tables -t nat -D POSTROUTING -s ${hosts.suez.wireguard.address.ipv6}/64 -o eth0 -j MASQUERADE
       '';
 
-      peers = map mkPeer (with hosts; [
-        "shanghai"
-        "tugboat"
-        "lagos"
-        "paris"
-        "carrier-1"
-        "carrier-2"
-        "carrier-3"
-        "carrier-4"
-        "carrier-5"
-      ]);
+      peers = map mkPeer (
+        with hosts;
+        [
+          "shanghai"
+          "tugboat"
+          "lagos"
+          "paris"
+          "carrier-1"
+          "carrier-2"
+          "carrier-3"
+          "carrier-4"
+          "carrier-5"
+        ]
+      );
     };
   };
 }

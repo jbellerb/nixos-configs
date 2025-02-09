@@ -63,10 +63,14 @@
   };
 
   # User
-  sops.secrets.waves-password = { neededForUsers = true; };
+  sops.secrets.waves-password.neededForUsers = true;
   users.users.waves = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+      "networkmanager"
+    ];
     hashedPasswordFile = config.sops.secrets.waves-password.path;
   };
 }

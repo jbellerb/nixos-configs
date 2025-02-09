@@ -1,4 +1,10 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   imports = [ "${modulesPath}/installer/scan/not-detected.nix" ];
@@ -57,8 +63,11 @@
   hardware.trackpoint.emulateWheel = true;
 
   # GPU
-  hardware.graphics.extraPackages =
-    with pkgs; [ intel-media-driver intel-compute-runtime vpl-gpu-rt ];
+  hardware.graphics.extraPackages = with pkgs; [
+    intel-media-driver
+    intel-compute-runtime
+    vpl-gpu-rt
+  ];
 
   # Firmware
   hardware.cpu.intel.updateMicrocode = true;

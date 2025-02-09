@@ -20,7 +20,7 @@
     };
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
-    kernel.sysctl = { "fs.inotify.max_user_watches" = 124866; };
+    kernel.sysctl."fs.inotify.max_user_watches" = 124866;
   };
 
   # CPU
@@ -35,7 +35,8 @@
         options = [ "defaults,noatime,subvol=${subvol}" ];
       };
 
-    in {
+    in
+    {
       "/" = mkSubvol "@";
       "/nix" = mkSubvol "@nix";
       "/.snapshots" = mkSubvol "@snapshots/root_snaps";
@@ -69,8 +70,13 @@
         TIMELINE_LIMIT_YEARLY = 0;
       };
 
-    in {
-      "root" = { SUBVOLUME = "/"; } // schedule;
-      "home" = { SUBVOLUME = "/home"; } // schedule;
+    in
+    {
+      "root" = {
+        SUBVOLUME = "/";
+      } // schedule;
+      "home" = {
+        SUBVOLUME = "/home";
+      } // schedule;
     };
 }

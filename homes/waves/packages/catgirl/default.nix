@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, pkg-config, libressl, ncurses, }:
+{
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libressl,
+  ncurses,
+}:
 
 let
   pname = "catgirl";
@@ -9,11 +15,15 @@ let
     sha256 = "sha256-ldUPq/oAHBqZ2CDC6UZd0vExnA+ws+8ccHUbLW58oxE=";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libressl ncurses ];
+  buildInputs = [
+    libressl
+    ncurses
+  ];
   buildFlags = [ "all" ];
 
   # Forgive me for my sins...

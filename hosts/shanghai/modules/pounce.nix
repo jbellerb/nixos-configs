@@ -22,13 +22,13 @@ let
       $WEBHOOK
   '';
 
-in {
-  sops.secrets.shanghai-pounce-certfp-libera = { owner = "pounce"; };
-  sops.secrets.shanghai-pounce-certfp-oftc = { owner = "pounce"; };
-  sops.secrets.shanghai-pounce-webhook = { owner = "pounce"; };
-
+in
+{
   users.users.pounce.extraGroups = [ config.users.groups.keys.name ];
 
+  sops.secrets.shanghai-pounce-certfp-libera.owner = "pounce";
+  sops.secrets.shanghai-pounce-certfp-oftc.owner = "pounce";
+  sops.secrets.shanghai-pounce-webhook.owner = "pounce";
   services.pounce = {
     enable = true;
     host = "irc.shanghai.home";

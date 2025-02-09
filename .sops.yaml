@@ -1,41 +1,41 @@
 keys:
-  - &lagos age1ma4t03shtknsqrr48dw3djsuz692z73axzh0z6e38myh3t8rgyrqlrd4z3
-  - &shanghai age15r9skq3lk306hdj4m284hhgm94yywe25dhdan0w6mud558rwquasfn0gz7
-  - &suez age132n8ntfem5u3436q89xe3l5ha0yt0vghu3fx3f97vs7qyyjfh3rsup740z
+    - &lagos age1ma4t03shtknsqrr48dw3djsuz692z73axzh0z6e38myh3t8rgyrqlrd4z3
+    - &shanghai age15r9skq3lk306hdj4m284hhgm94yywe25dhdan0w6mud558rwquasfn0gz7
+    - &suez age132n8ntfem5u3436q89xe3l5ha0yt0vghu3fx3f97vs7qyyjfh3rsup740z
 creation_rules:
-  - path_regex: hosts/lagos/secrets/[^/]+\.yaml$
-    key_groups:
-    - age:
-      - *lagos
-  - path_regex: hosts/shanghai/secrets/[^/]+\.yaml$
-    key_groups:
-    - age:
-      - *lagos
-      - *shanghai
-  - path_regex: hosts/suez/secrets/[^/]+\.yaml$
-    key_groups:
-    - age:
-      - *lagos
-      - *suez
-  - path_regex: hosts/secrets/keys/wg-suez-lagos-psk.yaml$
-    key_groups:
-    - age:
-      - *lagos
-      - *suez
-  - path_regex: hosts/secrets/keys/wg-suez-shanghai-psk.yaml$
-    key_groups:
-    - age:
-      - *lagos
-      - *shanghai
-      - *suez
-  - path_regex: hosts/secrets/keys/wg-suez-unmanaged-psk.yaml$
-    key_groups:
-    - age:
-      - *lagos
-      - *suez
-  - path_regex: hosts/secrets/[^/]+\.yaml$
-    key_groups:
-    - age:
-      - *lagos
-      - *shanghai
-      - *suez
+    - path_regex: hosts/lagos/secrets/[^/]+\.yaml$
+      key_groups:
+        - age:
+            - *lagos
+    - path_regex: hosts/shanghai/secrets/[^/]+\.yaml$
+      key_groups:
+        - age:
+            - *lagos
+            - *shanghai
+    - path_regex: hosts/suez/secrets/[^/]+\.yaml$
+      key_groups:
+        - age:
+            - *lagos
+            - *suez
+    - path_regex: hosts/secrets/keys/wg-suez-lagos-psk.yaml$
+      key_groups:
+        - age:
+            - *lagos
+            - *suez
+    - path_regex: hosts/secrets/keys/wg-suez-shanghai-psk.yaml$
+      key_groups:
+        - age:
+            - *lagos
+            - *shanghai
+            - *suez
+    - path_regex: hosts/secrets/keys/wg-suez-unmanaged-psk.yaml$
+      key_groups:
+        - age:
+            - *lagos
+            - *suez
+    - path_regex: hosts/secrets/[^/]+\.yaml$
+      key_groups:
+        - age:
+            - *lagos
+            - *shanghai
+            - *suez

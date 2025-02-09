@@ -25,7 +25,12 @@
     fsType = "ext4";
   };
   boot.tmp.useTmpfs = true;
-  swapDevices = [ { device = "/var/swapfile"; size = 2048; } ];
+  swapDevices = [
+    {
+      device = "/var/swapfile";
+      size = 2048;
+    }
+  ];
 
   # Bootloader
   boot.loader.grub.device = "/dev/xvda";

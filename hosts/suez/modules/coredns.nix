@@ -45,7 +45,8 @@ let
     *.shanghai.bridge.raindropdrop.top. CNAME shanghai.home.
   '';
 
-in {
+in
+{
   networking.firewall.allowedUDPPorts = [ 53 ];
 
   users = {
@@ -67,8 +68,8 @@ in {
   systemd.services.coredns.serviceConfig.User = "coredns";
   systemd.services.coredns.serviceConfig.StateDirectory = "coredns";
 
-  sops.secrets."Khome.+013+34119.key" = { owner = "coredns"; };
-  sops.secrets."Khome.+013+34119.private" = { owner = "coredns"; };
+  sops.secrets."Khome.+013+34119.key".owner = "coredns";
+  sops.secrets."Khome.+013+34119.private".owner = "coredns";
   services.coredns = {
     enable = true;
     config = ''

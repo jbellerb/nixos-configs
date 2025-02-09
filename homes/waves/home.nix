@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   home.username = "waves";
@@ -10,7 +15,7 @@
 
   home.packages = [
     pkgs.binutils
-    (pkgs.callPackage ./packages/catgirl {})
+    (pkgs.callPackage ./packages/catgirl { })
     pkgs.cmake
     pkgs.gcc
     pkgs.git-filter-repo
@@ -40,7 +45,10 @@
     pkgs.supercollider-with-sc3-plugins
   ];
 
-  home.sessionPath = [ "$HOME/.local/bin" "$HOME/.cargo/bin" ];
+  home.sessionPath = [
+    "$HOME/.local/bin"
+    "$HOME/.cargo/bin"
+  ];
 
   programs.fish = {
     enable = true;
@@ -52,7 +60,9 @@
   };
   programs.direnv = {
     enable = true;
-    config = { load_dotenv = true; };
+    config = {
+      load_dotenv = true;
+    };
     nix-direnv.enable = true;
   };
   programs.nix-index.enable = true;
@@ -131,8 +141,14 @@
 
     font = "VCTR Mono v0.10 12";
     terminal-cell-height = 1.1;
-    terminal-padding = lib.hm.gvariant.mkTuple
-      (map lib.hm.gvariant.mkUint32 [ 5 5 5 5 ]);
+    terminal-padding = lib.hm.gvariant.mkTuple (
+      map lib.hm.gvariant.mkUint32 [
+        5
+        5
+        5
+        5
+      ]
+    );
 
     use-custom-command = true;
     custom-shell-command = "/usr/bin/env fish";
@@ -168,9 +184,8 @@
   };
 
   xdg.configFile."SuperCollider/sclang_conf.yaml" = {
-    text = lib.generators.toYAML {} ({
-      includePaths = lib.concatMap (quark: [ "${quark}/quark" ])
-        [ pkgs.superdirt ];
+    text = lib.generators.toYAML { } ({
+      includePaths = lib.concatMap (quark: [ "${quark}/quark" ]) [ pkgs.superdirt ];
     });
   };
 }

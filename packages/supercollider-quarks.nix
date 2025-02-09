@@ -1,15 +1,25 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 let
-  buildSuperColliderQuark = {
-    pname,
-    version,
-    src,
-    runtimeDeps ? [ ],
-    meta ? null
-  }:
+  buildSuperColliderQuark =
+    {
+      pname,
+      version,
+      src,
+      runtimeDeps ? [ ],
+      meta ? null,
+    }:
     stdenvNoCC.mkDerivation {
-      inherit pname version src meta;
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
 
       installPhase = ''
         mkdir -p "$out/quark/${pname}"
@@ -29,7 +39,8 @@ let
       '';
     };
 
-in rec {
+in
+rec {
   vowel = buildSuperColliderQuark {
     pname = "Vowel";
     version = "ab59caa870201ecf2604b3efdd2196e21a8b5446";
@@ -79,7 +90,10 @@ in rec {
       hash = "sha256-FFBJBlUY6jttEEkn3qldS8z2qoncSyDITUy+x/6l5F8=";
     };
 
-    runtimeDeps = [ vowel dirt-samples ];
+    runtimeDeps = [
+      vowel
+      dirt-samples
+    ];
 
     meta = with lib; {
       homepage = "https://github.com/musikinformatik/SuperDirt";

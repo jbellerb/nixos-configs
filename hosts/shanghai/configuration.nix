@@ -42,6 +42,8 @@
   };
   services.wireguard.enable = true;
   services.wireguard.keepalive = true;
-  networking.nameservers =
-    with config.metadata.hosts.suez.wireguard.address; [ ipv4 ipv6 ];
+  networking.nameservers = with config.metadata.hosts.suez.wireguard.address; [
+    ipv4
+    ipv6
+  ];
 }
