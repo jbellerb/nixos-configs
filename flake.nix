@@ -63,6 +63,7 @@
         inherit (pkgs.callPackage packages/pounce.nix {})
           pounce
           pounce-extra;
+        feishin-web = pkgs.callPackage packages/feishin-web/default.nix {};
         inherit (pkgs.callPackage packages/supercollider-quarks.nix {})
           vowel
           dirt-samples

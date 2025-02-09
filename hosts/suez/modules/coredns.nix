@@ -3,7 +3,7 @@
 let
   hosts = config.metadata.hosts;
 
-  zoneFile = pkgs.writeText "home.zone" ''
+  zoneHome = pkgs.writeText "home.zone" ''
     $TTL 60
     $ORIGIN home.
 
@@ -24,6 +24,25 @@ let
     ${hosts.shanghai.wireguard.address.ipv4}.in-addr.arpa. IN PTR shanghai.home.
 
     *.shanghai.home. CNAME shanghai.home.
+  '';
+
+  zoneBridge = pkgs.writeText "bridge.raindropdrop.top.zone" ''
+    $TTL 60
+    $ORIGIN bridge.raindropdrop.top.
+
+    @ IN SOA suez.bridge.raindropdrop.top. suez.bridge.raindropdrop.top. (
+           2025020901 ; serial
+                28800 ; refresh
+                 7200 ; retry
+               864000 ; expire
+                86400 ; minimum
+    )
+
+    suez.bridge.raindropdrop.top. CNAME suez.home.
+    *.suez.bridge.raindropdrop.top. CNAME suez.home.
+
+    shanghai.bridge.raindropdrop.top. CNAME shanghai.home.
+    *.shanghai.bridge.raindropdrop.top. CNAME shanghai.home.
   '';
 
 in {
@@ -64,6 +83,8 @@ in {
           fallthrough
         }
 
+        file ${zoneBridge} bridge.raindropdrop.top
+
         forward . tls://1.1.1.1 tls://1.0.0.1 {
           tls_servername cloudflare-dns.com
           health_check 5s
@@ -81,7 +102,7 @@ in {
 
         file /var/lib/coredns/db.home.signed home
 
-        sign ${zoneFile} {
+        sign ${zoneHome} {
           key file ${config.sops.secrets."Khome.+013+34119.key".path}
         }
       }

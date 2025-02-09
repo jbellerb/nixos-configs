@@ -5,7 +5,7 @@ let
     pname,
     version,
     src,
-    runtimeDeps ? [],
+    runtimeDeps ? [ ],
     meta ? null
   }:
     stdenvNoCC.mkDerivation {
@@ -15,7 +15,7 @@ let
         mkdir -p "$out/quark/${pname}"
         cp -r ./* "$out/quark/${pname}"
 
-        if [ -n "${toString (runtimeDeps != [])}" ]
+        if [ -n "${toString (runtimeDeps != [ ])}" ]
         then
           for dep in ${lib.concatMapStringsSep " " toString runtimeDeps}
           do

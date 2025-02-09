@@ -10,6 +10,7 @@
 
     ./modules/docker.nix
     ./modules/git.nix
+    ./modules/gonic.nix
     ./modules/jellyfin.nix
     ./modules/nginx.nix
     ./modules/pounce.nix

@@ -1,5 +1,8 @@
 {
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    storageDriver = "btrfs";
+  };
 
-  users.users.port.extraGroups = [ "docker" ];
+  users.extraGroups.docker.members = [ "port" ];
 }

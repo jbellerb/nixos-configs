@@ -1,0 +1,77 @@
+diff --git a/.erb/configs/webpack.config.web.prod.ts b/.erb/configs/webpack.config.web.prod.ts
+index ed935fd..64d5e31 100644
+--- a/.erb/configs/webpack.config.web.prod.ts
++++ b/.erb/configs/webpack.config.web.prod.ts
+@@ -81,6 +81,18 @@ const configuration: webpack.Configuration = {
+                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                 type: 'asset/resource',
+             },
++            // Icons
++            {
++                test: /icon-\d*\.png$/i,
++                type: 'asset/resource',
++                generator: { filename: '[base]' },
++            },
++            // Manifest
++            {
++                test: /(^|.*\/)manifest.json$/i,
++                type: 'asset/resource',
++                generator: { filename: 'manifest.json' },
++            },
+         ],
+     },
+ 
+diff --git a/src/renderer/index.ejs b/src/renderer/index.ejs
+index 4d5ecd1..39f1a4b 100644
+--- a/src/renderer/index.ejs
++++ b/src/renderer/index.ejs
+@@ -7,6 +7,10 @@
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Feishin</title>
+   <% if (web) { %>
++  <link rel="manifest" href="<%- require('./manifest.json') %>">
++  <link rel="icon" type="image/png" href="<%- require('../../assets/icons/pwa-icon-196.png') %>" sizes="196x196">
++  <link rel="icon" type="image/png" href="<%- require('../../assets/icons/pwa-icon-512.png') %>" sizes="512x512">
++  <meta name="theme-color" content="#0c0c0c">
+   <script src="settings.js"></script>
+   <% } %>
+ </head>
+diff --git a/src/renderer/manifest.json b/src/renderer/manifest.json
+new file mode 100644
+index 0000000..c66d1b6
+--- /dev/null
++++ b/src/renderer/manifest.json
+@@ -0,0 +1,33 @@
++{
++  "short_name": "Feishin",
++  "name": "Feishin",
++  "icons": [
++    {
++      "src": "favicon.ico",
++      "type": "image/png",
++      "sizes": "32x32",
++      "purpose": "any"
++    },
++    {
++      "src": "pwa-icon-196.png",
++      "type": "image/png",
++      "sizes": "196x196",
++      "purpose": "maskable"
++    },
++    {
++      "src": "pwa-icon-512.png",
++      "type": "image/png",
++      "sizes": "512x512",
++      "purpose": "maskable"
++    }
++  ],
++  "id": "/",
++  "start_url": "/",
++  "background_color": "#121212",
++  "display": "standalone",
++  "scope": "/",
++  "theme_color": "#0c0c0c",
++  "shortcuts": [],
++  "description": "A modern self-hosted music player.",
++  "screenshots": []
++}

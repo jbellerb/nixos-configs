@@ -11,7 +11,7 @@
         enable = true;
         openFirewall = true;
         package = pkgs.jellyfin.overrideAttrs (prev: {
-          patches = (prev.patches or []) ++ [
+          patches = (prev.patches or [ ]) ++ [
             (pkgs.writeText "playlists.patch" ''
             index 45aefacf6..569a82fb9 100644
             --- a/MediaBrowser.Controller/Playlists/Playlist.cs
