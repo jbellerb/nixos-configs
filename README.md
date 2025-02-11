@@ -1,6 +1,6 @@
 # nixos-configs
 
-This flake contains configs for my NixOS machines and my in-progress ports and modules. Through multiple hardware changes (including the upgrade to 64-bit), some version of these configs has supported my computing needs. Flakeification of all the things happened in early 2022. I'll try to keep this current with my true config, but the two will differ until I figure out what to do with some private info. Secrets are managed with [sops-nix](https://github.com/Mic92/sops-nix).
+This flake contains configs for my NixOS machines and my in-progress ports and modules. Through multiple hardware changes (including the upgrade to 64-bit), some version of these configs has supported my computing needs. Flakeification of all the things happened in early 2022. ~~I'll try to keep this current with my true config, but the two will differ until I figure out what to do with some private info.~~ 2025 update: Secrets have been moved to a module in a private flake. See [modules/secrets.nix](modules/secrets.nix) for the attributes it sets. The secrets module is mostly a thin wrapper around [sops-nix](https://github.com/Mic92/sops-nix).
 
 ### shanghai
 
@@ -23,7 +23,7 @@ This repository is brought to you by [Mic92/dotfiles](https://github.com/Mic92/d
 #### License
 
 <sup>
-Copyright (C) Jared Beller, 2019-2023.
+Copyright (C) jae beller, 2019-2025.
 </sup>
 <br />
 <sup>

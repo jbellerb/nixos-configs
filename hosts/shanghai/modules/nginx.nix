@@ -83,16 +83,15 @@
     };
   };
 
-  sops.secrets.cloudflare-dns-api-token.owner = "nginx";
+  secrets.shanghai.cloudflare-dns-api-token.owner = "nginx";
   security.acme = {
     acceptTerms = true;
-    # defaults.dnsResolver = "1.1.1.1:53";
     defaults.email = "e+letsencrypt@jae.zone";
     certs."shanghai.bridge.raindropdrop.top" = {
       domain = "*.shanghai.bridge.raindropdrop.top";
       group = "nginx";
       dnsProvider = "cloudflare";
-      environmentFile = config.sops.secrets.cloudflare-dns-api-token.path;
+      environmentFile = config.secrets.shanghai.cloudflare-dns-api-token.path;
     };
   };
 }

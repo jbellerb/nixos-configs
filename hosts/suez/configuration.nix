@@ -2,7 +2,6 @@
 
 {
   networking.hostName = "suez";
-  sops.defaultSopsFile = secrets/secrets.yaml;
 
   imports = [
     ./hardware-configuration.nix

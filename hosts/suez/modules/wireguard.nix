@@ -5,15 +5,11 @@ let
 
   mkPeer = peer: {
     publicKey = hosts."${peer}".wireguard.publicKey;
-    presharedKeyFile = config.sops.secrets."wireguard-suez-${peer}-psk".path;
+    presharedKeyFile = config.secrets.wireguard."suez-${peer}-psk".path;
     allowedIPs = [
       "${hosts."${peer}".wireguard.address.ipv4}/32"
       "${hosts."${peer}".wireguard.address.ipv6}/128"
     ];
-  };
-
-  pskSecret = peerClass: {
-    sopsFile = ../../secrets/keys + "/wg-suez-${peerClass}-psk.yaml";
   };
 
 in
@@ -25,16 +21,16 @@ in
   networking.nat.externalInterface = "eth0";
   networking.nat.internalInterfaces = [ "wg0" ];
 
-  sops.secrets.suez-wireguard-private = { };
-  sops.secrets.wireguard-suez-shanghai-psk = pskSecret "shanghai";
-  sops.secrets.wireguard-suez-tugboat-psk = pskSecret "unmanaged";
-  sops.secrets.wireguard-suez-lagos-psk = pskSecret "lagos";
-  sops.secrets.wireguard-suez-paris-psk = pskSecret "unmanaged";
-  sops.secrets.wireguard-suez-carrier-1-psk = pskSecret "unmanaged";
-  sops.secrets.wireguard-suez-carrier-2-psk = pskSecret "unmanaged";
-  sops.secrets.wireguard-suez-carrier-3-psk = pskSecret "unmanaged";
-  sops.secrets.wireguard-suez-carrier-4-psk = pskSecret "unmanaged";
-  sops.secrets.wireguard-suez-carrier-5-psk = pskSecret "unmanaged";
+  secrets.suez.wireguard-private = { };
+  secrets.wireguard.suez-shanghai-psk = { };
+  secrets.wireguard.suez-tugboat-psk = { };
+  secrets.wireguard.suez-lagos-psk = { };
+  secrets.wireguard.suez-paris-psk = { };
+  secrets.wireguard.suez-carrier-1-psk = { };
+  secrets.wireguard.suez-carrier-2-psk = { };
+  secrets.wireguard.suez-carrier-3-psk = { };
+  secrets.wireguard.suez-carrier-4-psk = { };
+  secrets.wireguard.suez-carrier-5-psk = { };
   networking.wireguard.interfaces = {
     wg0 = {
       ips = [
@@ -42,7 +38,7 @@ in
         "${hosts.suez.wireguard.address.ipv6}/64"
       ];
       listenPort = hosts.suez.wireguard.port;
-      privateKeyFile = config.sops.secrets.suez-wireguard-private.path;
+      privateKeyFile = config.secrets.suez.wireguard-private.path;
 
       postSetup = ''
         ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${hosts.suez.wireguard.address.ipv4}/24 -o eth0 -j MASQUERADE

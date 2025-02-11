@@ -13,10 +13,6 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,6 +35,14 @@
 
       metadata = import hosts/metadata.nix;
 
+      # Fetch with getFlake instead of inputs so packages and modules can still
+      # be used, even when the consumer doesn't have access to the secrets
+      # repository. Nix's lazy evaluation ensures this only gets pulled when
+      # it's needed for building nixosConfigurations.
+      secretsRepo = "git+ssh://git@shanghai.home/nixos-secrets";
+      secretsRev = "ac694cb9fde8894d1742b3c591b7de0eb8790567";
+      secrets = builtins.getFlake "${secretsRepo}?rev=${secretsRev}";
+
       deployOverlay = final: prev: {
         deploy-rs = inputs.deploy-rs.packages."${system}".default;
       };
@@ -58,7 +62,7 @@
           nixpkgs.overlays = defaultOverlays;
           inherit metadata;
         }
-        inputs.sops-nix.nixosModules.sops
+        secrets.nixosModules.secrets
       ];
 
       pkgs = import nixpkgs {
@@ -76,13 +80,7 @@
         { pkgs, ... }:
         {
           projectRootFile = "flake.nix";
-          programs = {
-            nixfmt.enable = true;
-            yamlfmt = {
-              enable = true;
-              settings.formatter.indent = 4;
-            };
-          };
+          programs.nixfmt.enable = true;
           settings.global.excludes = [
             ".envrc"
             "LICENSE"
@@ -159,15 +157,12 @@
         adlist = import modules/adlist.nix;
         metadata = import modules/metadata.nix;
         pounce = import modules/pounce.nix;
+        secrets = import modules/secrets.nix;
         wireguard = import modules/wireguard.nix;
       };
 
       devShells."${system}".default = pkgs.mkShell {
-        nativeBuildInputs = [
-          pkgs.deploy-rs
-          pkgs.sops
-          pkgs.wireguard-tools
-        ];
+        nativeBuildInputs = [ pkgs.deploy-rs ];
       };
 
       formatter."${system}" = treefmt.config.build.wrapper;

@@ -5,7 +5,7 @@ let
 
   notify-script = network: ''
     NETWORK="${network}"
-    WEBHOOK=$(cat "${config.sops.secrets.shanghai-pounce-webhook.path}")
+    WEBHOOK=$(cat "${config.secrets.shanghai.pounce-webhook.path}")
 
     if [ -z "$NOTIFY_CHANNEL" ]; then
       TITLE="Private Message"
@@ -24,42 +24,18 @@ let
 
 in
 {
-  users.users.pounce.extraGroups = [ config.users.groups.keys.name ];
-
-  sops.secrets.shanghai-pounce-certfp-libera.owner = "pounce";
-  sops.secrets.shanghai-pounce-certfp-oftc.owner = "pounce";
-  sops.secrets.shanghai-pounce-webhook.owner = "pounce";
+  secrets.shanghai.pounce-webhook.owner = "pounce";
   services.pounce = {
     enable = true;
     host = "irc.shanghai.home";
     user = "pounce";
     openFirewall = true;
 
-    networks = {
-      libera = {
-        config = {
-          host = "irc.libera.chat";
-          nick = "waves";
-          client-cert = config.sops.secrets.shanghai-pounce-certfp-libera.path;
-          sasl-external = true;
-          join = "#openbsd,#nixos";
-          away = away-msg;
-          save = "/var/lib/pounce/buffer/libera";
-        };
-        notify.script = notify-script "libera";
+    networks = builtins.mapAttrs (name: config: {
+      config = config // {
+        away = away-msg;
       };
-
-      oftc = {
-        config = {
-          host = "irc.oftc.net";
-          nick = "waves";
-          client-cert = config.sops.secrets.shanghai-pounce-certfp-oftc.path;
-          join = "#vtluug,#vtluug-infra,#wuvt,#oftc";
-          away = away-msg;
-          save = "/var/lib/pounce/buffer/oftc";
-        };
-        notify.script = notify-script "oftc";
-      };
-    };
+      notify.script = notify-script "name";
+    }) config.secrets.shanghai.pounce-networks;
   };
 }

@@ -2,7 +2,6 @@
 
 {
   networking.hostName = "shanghai";
-  sops.defaultSopsFile = secrets/secrets.yaml;
 
   imports = [
     ./hardware-configuration.nix
@@ -36,12 +35,12 @@
   networking.firewall.allowPing = true;
 
   # VPN
-  sops.secrets.shanghai-wireguard-private = { };
-  sops.secrets.wireguard-suez-shanghai-psk = {
-    sopsFile = ../secrets/keys/wg-suez-shanghai-psk.yaml;
+  secrets.shanghai.wireguard-private = { };
+  secrets.wireguard.suez-shanghai-psk = { };
+  services.wireguard = {
+    enable = true;
+    keepalive = true;
   };
-  services.wireguard.enable = true;
-  services.wireguard.keepalive = true;
   networking.nameservers = with config.metadata.hosts.suez.wireguard.address; [
     ipv4
     ipv6

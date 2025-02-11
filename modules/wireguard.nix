@@ -37,12 +37,12 @@ with lib;
           "${hosts."${hostname}".wireguard.address.ipv4}/32"
           "${hosts."${hostname}".wireguard.address.ipv6}/128"
         ];
-        privateKeyFile = config.sops.secrets."${hostname}-wireguard-private".path;
+        privateKeyFile = config.secrets."${hostname}".wireguard-private.path;
 
         peers = [
           {
             publicKey = hosts.suez.wireguard.publicKey;
-            presharedKeyFile = config.sops.secrets."wireguard-suez-${hostname}-psk".path;
+            presharedKeyFile = config.secrets.wireguard."suez-${hostname}-psk".path;
             allowedIPs = [
               # TODO: network definitions in metadata
               "10.131.0.0/24"

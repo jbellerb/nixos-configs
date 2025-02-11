@@ -52,11 +52,8 @@ in
   users = {
     users.coredns = {
       isSystemUser = true;
-
       group = config.users.groups.coredns.name;
-      extraGroups = [ config.users.groups.keys.name ];
     };
-
     groups.coredns = { };
   };
 
@@ -68,8 +65,8 @@ in
   systemd.services.coredns.serviceConfig.User = "coredns";
   systemd.services.coredns.serviceConfig.StateDirectory = "coredns";
 
-  sops.secrets."Khome.+013+34119.key".owner = "coredns";
-  sops.secrets."Khome.+013+34119.private".owner = "coredns";
+  secrets.suez."Khome.+013+34119.key".owner = "coredns";
+  secrets.suez."Khome.+013+34119.private".owner = "coredns";
   services.coredns = {
     enable = true;
     config = ''
@@ -104,7 +101,7 @@ in
         file /var/lib/coredns/db.home.signed home
 
         sign ${zoneHome} {
-          key file ${config.sops.secrets."Khome.+013+34119.key".path}
+          key file ${config.secrets.suez."Khome.+013+34119.key".path}
         }
       }
     '';

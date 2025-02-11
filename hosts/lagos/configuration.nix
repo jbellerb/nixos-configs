@@ -2,8 +2,6 @@
 
 {
   networking.hostName = "lagos";
-  sops.defaultSopsFile = secrets/secrets.yaml;
-  sops.age.keyFile = "/home/waves/.config/sops/age/keys.txt";
 
   imports = [
     ./hardware-configuration.nix
@@ -20,9 +18,9 @@
   networking.firewall.enable = true;
 
   # VPN
-  sops.secrets."wg0.nmconnection" = { };
+  secrets.lagos."wg0.nmconnection" = { };
   environment.etc."NetworkManager/system-connections/wg0.nmconnection" = {
-    source = config.sops.secrets."wg0.nmconnection".path;
+    source = config.secrets.lagos."wg0.nmconnection".path;
   };
 
   # Graphics
@@ -63,7 +61,7 @@
   };
 
   # User
-  sops.secrets.waves-password.neededForUsers = true;
+  secrets.lagos.waves-password.neededForUsers = true;
   users.users.waves = {
     isNormalUser = true;
     extraGroups = [
@@ -71,6 +69,6 @@
       "docker"
       "networkmanager"
     ];
-    hashedPasswordFile = config.sops.secrets.waves-password.path;
+    hashedPasswordFile = config.secrets.lagos.waves-password.path;
   };
 }

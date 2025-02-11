@@ -1,9 +1,5 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
-let
-  shares = [ "jared" ];
-
-in
 {
   services.samba = {
     enable = true;
@@ -35,7 +31,7 @@ in
             "directory mask" = "0700";
             "valid users" = "${n}";
           }
-        ) shares
+        ) config.secrets.shanghai.samba-shares
       );
   };
 
@@ -54,6 +50,6 @@ in
         group = "smbusers";
         uid = 2000 + i;
       }
-    ) shares
+    ) config.secrets.shanghai.samba-shares
   );
 }
