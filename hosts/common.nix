@@ -22,6 +22,7 @@
     gc.options = "--delete-older-than 14d";
     optimise.automatic = true;
   };
+  systemd.services.nix-daemon.environment.TMPDIR = "/var/tmp";
 
   # Keyboard and locale
   i18n.defaultLocale = "en_US.UTF-8";
