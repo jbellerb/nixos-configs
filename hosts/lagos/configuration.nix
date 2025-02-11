@@ -12,7 +12,10 @@
   environment.systemPackages = with pkgs; [ wl-clipboard ];
 
   # Networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    wifi.backend = "iwd";
+  };
 
   # Firewall
   networking.firewall.enable = true;
