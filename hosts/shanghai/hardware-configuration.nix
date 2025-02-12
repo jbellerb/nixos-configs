@@ -51,6 +51,7 @@
 
   # Bootloader
   boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.configurationLimit = 8;
 
   # Drive maintenence
   services.btrfs.autoScrub = {

@@ -6,6 +6,7 @@
   imports = [
     ./hardware-configuration.nix
     ../common.nix
+    ../server-common.nix
 
     ./modules/coredns.nix
     ./modules/wireguard.nix
@@ -17,8 +18,4 @@
   # Networking
   networking.useDHCP = false;
   networking.interfaces.eth0.useDHCP = true;
-
-  # Firewall
-  networking.firewall.enable = true;
-  networking.firewall.allowPing = true;
 }

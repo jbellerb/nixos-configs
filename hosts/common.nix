@@ -4,7 +4,18 @@
   # system.autoUpgrade.enable = true;
 
   nix = {
+    channel.enable = false;
     settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      log-lines = 20;
+
+      # Force garbage collection of storage drops below 512MiB during build
+      max-free = 1024 * 1024 * 1024;
+      min-free = 512 * 1024 * 1024;
+
       substituters = [ "https://nix-community.cachix.org" ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -16,13 +27,14 @@
       ];
     };
 
-    extraOptions = "experimental-features = nix-command flakes";
-
     gc.automatic = true;
     gc.options = "--delete-older-than 14d";
     optimise.automatic = true;
   };
   systemd.services.nix-daemon.environment.TMPDIR = "/var/tmp";
+
+  # Boot
+  boot.initrd.systemd.enable = true;
 
   # Keyboard and locale
   i18n.defaultLocale = "en_US.UTF-8";
@@ -33,6 +45,9 @@
 
   # Timezone
   time.timeZone = "America/New_York";
+
+  # Firewall
+  networking.firewall.enable = true;
 
   # SSH
   services.openssh = {

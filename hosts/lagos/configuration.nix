@@ -17,14 +17,14 @@
     wifi.backend = "iwd";
   };
 
-  # Firewall
-  networking.firewall.enable = true;
-
   # VPN
   secrets.lagos."wg0.nmconnection" = { };
   environment.etc."NetworkManager/system-connections/wg0.nmconnection" = {
     source = config.secrets.lagos."wg0.nmconnection".path;
   };
+
+  # D-Bus
+  services.dbus.implementation = "broker";
 
   # Graphics
   services.xserver = {

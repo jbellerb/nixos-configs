@@ -6,6 +6,7 @@
   imports = [
     ./hardware-configuration.nix
     ../common.nix
+    ../server-common.nix
 
     ./modules/docker.nix
     ./modules/git.nix
@@ -19,6 +20,13 @@
   # Device-specific packages
   environment.systemPackages = with pkgs; [ duperemove ];
 
+  # systemd
+  systemd.watchdog = {
+    runtimeTime = "30s";
+    rebootTime = "1m";
+    kexecTime = "1m";
+  };
+
   # Networking
   networking.useDHCP = false;
   networking.interfaces.enp3s0.useDHCP = true;
@@ -29,10 +37,6 @@
     externalInterface = "enp3s0";
     internalInterfaces = [ "ve-+" ];
   };
-
-  # Firewall
-  networking.firewall.enable = true;
-  networking.firewall.allowPing = true;
 
   # VPN
   secrets.shanghai.wireguard-private = { };
