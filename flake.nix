@@ -40,7 +40,7 @@
       # repository. Nix's lazy evaluation ensures this only gets pulled when
       # it's needed for building nixosConfigurations.
       secretsRepo = "git+ssh://git@shanghai.home/nixos-secrets";
-      secretsRev = "ac694cb9fde8894d1742b3c591b7de0eb8790567";
+      secretsRev = "8f6807a90ecf1421fb8958afce09269c18facd2c";
       secrets = builtins.getFlake "${secretsRepo}?rev=${secretsRev}";
 
       deployOverlay = final: prev: {

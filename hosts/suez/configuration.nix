@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   networking.hostName = "suez";
@@ -16,6 +16,12 @@
   environment.systemPackages = with pkgs; [ ];
 
   # Networking
-  networking.useDHCP = false;
-  networking.interfaces.eth0.useDHCP = true;
+  systemd.network.networks."10-ens5" = {
+    matchConfig.Name = "ens5";
+    networkConfig = {
+      DHCP = "ipv4";
+      IPv6AcceptRA = true;
+    };
+    ntp = [ "169.254.169.123" ]; # EC2's time server
+  };
 }

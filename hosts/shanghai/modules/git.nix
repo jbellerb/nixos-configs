@@ -10,8 +10,8 @@ in
     isNormalUser = true;
     inherit home uid;
     openssh.authorizedKeys.keys = with config.metadata.hosts; [
-      lagos.ssh_pubkey
-      tugboat.ssh_pubkey
+      lagos.sshPubkey
+      tugboat.sshPubkey
     ];
   };
 

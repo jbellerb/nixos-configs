@@ -11,13 +11,18 @@
   };
 
   # Networking
-  networking.useNetworkd = true;
-  systemd.network.wait-online.enable = false;
+  systemd.network = {
+    enable = true;
+    wait-online.enable = false;
+  };
+  networking.useDHCP = false;
+
   systemd.services.systemd-networkd.stopIfChanged = false;
   systemd.services.systemd-resolved.stopIfChanged = false;
 
   # Firewall
   networking.firewall.allowPing = true;
+  networking.nftables.enable = false; # TODO: enable once off Docker
 
   # Remove some desktop things
   environment.stub-ld.enable = false;

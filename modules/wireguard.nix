@@ -2,6 +2,11 @@
 
 with lib;
 
+let
+  hosts = config.metadata.hosts;
+  hostname = config.networking.hostName;
+
+in
 {
   options.services.wireguard = {
     enable = mkEnableOption "connecting to the WireGuard VPN via Suez";
@@ -18,40 +23,45 @@ with lib;
   };
 
   config = mkIf config.services.wireguard.enable {
-    networking.nameservers = mkIf config.services.wireguard.dns (
-      with config.metadata.hosts.suez.wireguard.address;
-      [
-        ipv4
-        ipv6
-      ]
-    );
-
-    networking.wireguard.interfaces.wg0 =
-      let
-        hostname = config.networking.hostName;
-        hosts = config.metadata.hosts;
-
-      in
-      {
-        ips = [
-          "${hosts."${hostname}".wireguard.address.ipv4}/32"
-          "${hosts."${hostname}".wireguard.address.ipv6}/128"
-        ];
-        privateKeyFile = config.secrets."${hostname}".wireguard-private.path;
-
-        peers = [
+    secrets."${hostname}".wireguard-private.owner = "systemd-network";
+    secrets.wireguard."suez-${hostname}-psk".owner = "systemd-network";
+    systemd.network = {
+      netdevs."30-wg0" = {
+        netdevConfig = {
+          Name = "wg0";
+          Kind = "wireguard";
+        };
+        wireguardConfig = {
+          PrivateKeyFile = config.secrets."${hostname}".wireguard-private.path;
+          RouteTable = "main";
+        };
+        wireguardPeers = [
           {
-            publicKey = hosts.suez.wireguard.publicKey;
-            presharedKeyFile = config.secrets.wireguard."suez-${hostname}-psk".path;
-            allowedIPs = [
-              # TODO: network definitions in metadata
-              "10.131.0.0/24"
-              "fd3b:fe0b:d86b:a5ec::/64"
+            PublicKey = hosts.suez.wireguard.publicKey;
+            PresharedKeyFile = config.secrets.wireguard."suez-${hostname}-psk".path;
+            AllowedIPs = [
+              "${hosts.suez.wireguard.address.ipv4}/24"
+              "${hosts.suez.wireguard.address.ipv6}/64"
             ];
-            endpoint = "${hosts.suez.ip_addr}:${toString hosts.suez.wireguard.port}";
-            persistentKeepalive = mkIf config.services.wireguard.keepalive 25;
+            Endpoint = "${hosts.suez.ipAddr}:${toString hosts.suez.wireguard.port}";
+            PersistentKeepalive = mkIf config.services.wireguard.keepalive 25;
           }
         ];
       };
+      networks."30-wg0" = {
+        matchConfig.Name = "wg0";
+        address = [
+          "${hosts."${hostname}".wireguard.address.ipv4}/32"
+          "${hosts."${hostname}".wireguard.address.ipv6}/128"
+        ];
+        dns = mkIf config.services.wireguard.dns (
+          with hosts.suez.wireguard.address;
+          [
+            ipv4
+            ipv6
+          ]
+        );
+      };
+    };
   };
 }

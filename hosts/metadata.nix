@@ -1,7 +1,7 @@
 {
   hosts.suez = {
-    ip_addr = "34.237.46.36";
-    ssh_pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEaBHM1yjujL13+bMkRUTnNSxWjODSRszYfGgaR+tHIm";
+    ipAddr = "34.237.46.36";
+    sshPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILhds9u3W5vz+6nbXeWDqKu4iB8tE/XuWrXf1j7Ralwf";
     wireguard = {
       address.ipv4 = "10.131.0.1";
       address.ipv6 = "fd3b:fe0b:d86b:a5ec::1";
@@ -11,7 +11,7 @@
   };
 
   hosts.shanghai = {
-    ssh_pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMuIgouw4tmR/OhZchYUyWKGTJL0AMTLXEOxRwqvHm41";
+    sshPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMuIgouw4tmR/OhZchYUyWKGTJL0AMTLXEOxRwqvHm41";
     wireguard = {
       address.ipv4 = "10.131.0.2";
       address.ipv6 = "fd3b:fe0b:d86b:a5ec::2";
@@ -20,7 +20,7 @@
   };
 
   hosts.tugboat = {
-    ssh_pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQk2p9D39c69apfAZM1TS9kBXmHVohiy0TllXY0ZRjM";
+    sshPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQk2p9D39c69apfAZM1TS9kBXmHVohiy0TllXY0ZRjM";
     wireguard = {
       address.ipv4 = "10.131.0.3";
       address.ipv6 = "fd3b:fe0b:d86b:a5ec::3";
@@ -29,7 +29,7 @@
   };
 
   hosts.lagos = {
-    ssh_pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBI2qx9/prfNZ+SzatkRncojXfDlUNrp7Iw7myA7qpK2";
+    sshPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBI2qx9/prfNZ+SzatkRncojXfDlUNrp7Iw7myA7qpK2";
     wireguard = {
       address.ipv4 = "10.131.0.4";
       address.ipv6 = "fd3b:fe0b:d86b:a5ec::4";
@@ -38,7 +38,7 @@
   };
 
   hosts.paris = {
-    ssh_pubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKgvU8qHvL3jDg8Y58kAI0Ve9+oFwGEcYYt1VEg4kmnY";
+    sshPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKgvU8qHvL3jDg8Y58kAI0Ve9+oFwGEcYYt1VEg4kmnY";
     wireguard = {
       address.ipv4 = "10.131.0.5";
       address.ipv6 = "fd3b:fe0b:d86b:a5ec::5";
