@@ -17,7 +17,7 @@
 
   # Networking
   systemd.network.networks."10-ens5" = {
-    matchConfig.Name = "ens5";
+    name = "ens5";
     networkConfig = {
       DHCP = "ipv4";
       IPv6AcceptRA = true;

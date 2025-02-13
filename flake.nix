@@ -156,6 +156,7 @@
       nixosModules = {
         adlist = import modules/adlist.nix;
         metadata = import modules/metadata.nix;
+        nspawn = import modules/nspawn.nix;
         pounce = import modules/pounce.nix;
         secrets = import modules/secrets.nix;
         wireguard = import modules/wireguard.nix;

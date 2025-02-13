@@ -49,7 +49,7 @@ in
         ];
       };
       networks."30-wg0" = {
-        matchConfig.Name = "wg0";
+        name = "wg0";
         address = [
           "${hosts."${hostname}".wireguard.address.ipv4}/32"
           "${hosts."${hostname}".wireguard.address.ipv6}/128"

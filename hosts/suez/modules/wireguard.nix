@@ -46,7 +46,7 @@ in
       wireguardPeers = builtins.map mkPeer peers;
     };
     networks."50-wg0" = {
-      matchConfig.Name = "wg0";
+      name = "wg0";
       address = [
         "${hosts.suez.wireguard.address.ipv4}/24"
         "${hosts.suez.wireguard.address.ipv6}/64"

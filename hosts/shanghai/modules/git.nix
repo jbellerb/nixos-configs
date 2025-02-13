@@ -15,15 +15,11 @@ in
     ];
   };
 
-  containers.git = {
-    ephemeral = true;
-    autoStart = true;
+  virtualization.nspawn.git = {
     config =
       { pkgs, ... }:
       {
         system.stateVersion = "24.11";
-
-        environment.systemPackages = with pkgs; [ git ];
 
         users.users.git = {
           isNormalUser = true;
@@ -45,12 +41,11 @@ in
             done
           '';
         };
+
+        programs.git.enable = true;
       };
 
-    bindMounts."/var/lib/git" = {
-      hostPath = "/var/lib/git";
-      isReadOnly = false;
-    };
+    bind = [ "${home}:${home}:idmap" ];
   };
 
   services.openssh.extraConfig = ''
