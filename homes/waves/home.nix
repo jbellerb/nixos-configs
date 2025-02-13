@@ -1,7 +1,7 @@
 {
   config,
-  pkgs,
   lib,
+  pkgs,
   ...
 }:
 
@@ -89,6 +89,22 @@
         mouse = false;
         true-color = true;
       };
+    };
+  };
+
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      user = {
+        email = "foss@jae.zone";
+        name = "jae beller";
+      };
+      signing = {
+        sign-all = true;
+        backend = "gpg";
+        key = "A76F1F7129E50AF7";
+      };
+      ui.default-command = "log";
     };
   };
 
