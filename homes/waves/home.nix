@@ -28,6 +28,7 @@
     pkgs.blackbox-terminal
     pkgs.discord
     pkgs.ghostty
+    pkgs.newsflash
 
     # nix
     pkgs.cachix
