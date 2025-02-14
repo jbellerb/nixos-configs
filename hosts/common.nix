@@ -81,7 +81,10 @@
   '';
 
   # Packages
-  environment.systemPackages = with pkgs; [ wget ];
+  environment.systemPackages = with pkgs; [
+    wget
+    ghostty.terminfo
+  ];
   programs = {
     git.enable = true;
     htop.enable = true;
