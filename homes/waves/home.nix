@@ -105,7 +105,10 @@
         backend = "gpg";
         key = "A76F1F7129E50AF7";
       };
-      ui.default-command = "log";
+      ui = {
+        default-command = "log";
+        pager = "less -FRX";
+      };
     };
   };
 
