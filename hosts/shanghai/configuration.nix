@@ -12,8 +12,10 @@
     ./modules/git.nix
     ./modules/gonic.nix
     ./modules/jellyfin.nix
+    ./modules/miniflux.nix
     ./modules/nginx.nix
     ./modules/pounce.nix
+    ./modules/postgresql.nix
     ./modules/samba.nix
   ];
 
