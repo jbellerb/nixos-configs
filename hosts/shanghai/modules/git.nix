@@ -36,7 +36,6 @@ in
           script = ''
             for repo in ${home}/*
             do
-              ln -s "''$repo" "/''${repo##*/}"
               ln -s "''$repo" "/''${repo##*/}.git"
             done
           '';
