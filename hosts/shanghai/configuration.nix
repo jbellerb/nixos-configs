@@ -43,6 +43,7 @@
   # VPN
   services.wireguard = {
     enable = true;
+    dns = true;
     keepalive = true;
   };
 }
