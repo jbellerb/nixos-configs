@@ -91,11 +91,12 @@
     in
     {
       packages."${system}" = {
+        apprise-api = pkgs.callPackage packages/apprise-api.nix { };
+        feishin-web = pkgs.callPackage packages/feishin-web/default.nix { };
         inherit (pkgs.callPackage packages/pounce.nix { })
           pounce
           pounce-extra
           ;
-        feishin-web = pkgs.callPackage packages/feishin-web/default.nix { };
         inherit (pkgs.callPackage packages/supercollider-quarks.nix { })
           vowel
           dirt-samples
@@ -154,6 +155,7 @@
 
       nixosModules = {
         adlist = import modules/adlist.nix;
+        apprise = import modules/apprise.nix;
         metadata = import modules/metadata.nix;
         nspawn = import modules/nspawn.nix;
         pounce = import modules/pounce.nix;

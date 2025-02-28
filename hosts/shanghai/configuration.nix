@@ -8,6 +8,7 @@
     ../common.nix
     ../server-common.nix
 
+    ./modules/apprise.nix
     ./modules/docker.nix
     ./modules/git.nix
     ./modules/gonic.nix
