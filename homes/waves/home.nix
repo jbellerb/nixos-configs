@@ -55,9 +55,55 @@
     enable = true;
     shellInit = ''
       set fish_greeting
-
-      set --append fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d
     '';
+    plugins = [
+      {
+        name = "foreign-env";
+        src = "${pkgs.fishPlugins.foreign-env}/share/fish";
+      }
+    ];
+    functions = {
+      fish_vcs_prompt = {
+        description = "Print all vcs prompts";
+        body = ''
+          fish_jj_prompt $argv
+          or fish_git_prompt $argv
+          or fish_hg_prompt $argv
+          or fish_fossil_prompt $argv
+        '';
+      };
+      fish_jj_prompt = {
+        description = "Prompt function for Jujutsu";
+        body = ''
+          if not command -sq jj; or not jj root &> /dev/null
+              return 1
+          end
+
+          jj log --no-graph -r @ -T '
+              surround(
+                  " (",
+                  ")",
+                  separate(
+                      " ",
+                      coalesce(
+                          if(
+                              description.first_line().substr(0, 18).starts_with(description.first_line()),
+                              description.first_line().substr(0, 18),
+                              description.first_line().substr(0, 15) ++ "..."
+                          ),
+                          surround(
+                              raw_escape_sequence("\e[33m"),
+                              raw_escape_sequence("\e[0m"),
+                              "(no description set)",
+                          ),
+                      ),
+                      surround("(", ")", bookmarks.join(", ")),
+                  ),
+              )
+          ' --ignore-working-copy --color always
+        '';
+      };
+    };
   };
   programs.direnv = {
     enable = true;
@@ -106,8 +152,22 @@
         key = "A76F1F7129E50AF7";
       };
       ui = {
-        default-command = "log";
+        default-command = "status";
+        editor = "hx";
         pager = "less -FRX";
+      };
+      aliases = {
+        l = [ "log" ];
+      };
+      fix.tools = {
+        nix = {
+          command = [
+            "${pkgs.nixfmt-rfc-style}/bin/nixfmt"
+            "-f"
+            "$path"
+          ];
+          patterns = [ "glob:'**/*.nix'" ];
+        };
       };
     };
   };
