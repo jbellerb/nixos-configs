@@ -3,6 +3,8 @@
 {
   # system.autoUpgrade.enable = true;
 
+  system.stateVersion = "23.05";
+
   nix = {
     channel.enable = false;
     settings = {
@@ -35,6 +37,16 @@
 
   # Boot
   boot.initrd.systemd.enable = true;
+  boot.loader = {
+    grub.enable = false;
+    systemd-boot = {
+      enable = true;
+      configurationLimit = 8;
+      editor = false;
+    };
+
+    efi.efiSysMountPoint = "/boot/efi";
+  };
 
   # Keyboard and locale
   i18n.defaultLocale = "en_US.UTF-8";
@@ -73,6 +85,7 @@
     ];
   };
 
+  services.userborn.enable = true;
   users.mutableUsers = false;
 
   security.pam.sshAgentAuth.enable = true;
@@ -80,11 +93,19 @@
     %wheel ALL= NOPASSWD:${pkgs.rsync}/bin/rsync
   '';
 
+  # Disable NixOS Containers (to use systemd-nspawn instead)
+  boot.enableContainers = false;
+
   # Packages
-  environment.systemPackages = with pkgs; [
-    wget
-    ghostty.terminfo
-  ];
+  system.disableInstallerTools = true;
+  environment = {
+    defaultPackages = [ ];
+    systemPackages = with pkgs; [
+      nixos-rebuild
+      ghostty.terminfo
+      wget
+    ];
+  };
   programs = {
     git.enable = true;
     htop.enable = true;
@@ -94,5 +115,10 @@
       enable = true;
       defaultEditor = true;
     };
+
+    # Remove random perl bits
+    less.lessopen = null;
+    command-not-found.enable = false;
   };
+  documentation.info.enable = false;
 }

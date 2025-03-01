@@ -1,6 +1,14 @@
 { config, pkgs, ... }:
 
 {
+  # Reboot on panic
+  boot.kernelParams = [
+    "panic=1"
+    "boot.panic_on_fail"
+    "vga=0x317"
+    "nomodeset"
+  ];
+
   # systemd
   systemd = {
     enableEmergencyMode = false;
@@ -27,11 +35,16 @@
   # Remove some desktop things
   environment.stub-ld.enable = false;
   fonts.fontconfig.enable = false;
+  services.udisks2.enable = false;
   xdg = {
     autostart.enable = false;
     icons.enable = false;
     menus.enable = false;
     mime.enable = false;
     sounds.enable = false;
+  };
+  documentation = {
+    dev.enable = false;
+    doc.enable = false;
   };
 }

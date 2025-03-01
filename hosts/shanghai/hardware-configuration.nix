@@ -50,8 +50,14 @@
   ];
 
   # Bootloader
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.configurationLimit = 8;
+  boot.loader = {
+    grub = {
+      enable = lib.mkForce true;
+      device = "/dev/sda";
+      configurationLimit = 8;
+    };
+    systemd-boot.enable = lib.mkForce false;
+  };
 
   # Drive maintenence
   services.btrfs.autoScrub = {

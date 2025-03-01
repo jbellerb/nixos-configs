@@ -58,7 +58,6 @@
       defaultModules = [
         {
           imports = nixpkgs.lib.attrValues self.nixosModules;
-          system.stateVersion = "23.05";
           nixpkgs.overlays = defaultOverlays;
           inherit metadata;
         }
