@@ -141,6 +141,7 @@
 
   programs.jujutsu = {
     enable = true;
+    package = pkgs.unstable.jujutsu;
     settings = {
       user = {
         email = "foss@jae.zone";
