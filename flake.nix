@@ -1,9 +1,9 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
@@ -20,7 +20,7 @@
     };
     ghostty = {
       url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -41,7 +41,7 @@
       # repository. Nix's lazy evaluation ensures this only gets pulled when
       # it's needed for building nixosConfigurations.
       secretsRepo = "git+ssh://git@shanghai.home/nixos-secrets";
-      secretsRev = "8f6807a90ecf1421fb8958afce09269c18facd2c";
+      secretsRev = "05cc5aba324e2299bb26043c8b90c716e35a4040";
       secrets = builtins.getFlake "${secretsRepo}?rev=${secretsRev}";
 
       deployOverlay = final: prev: {

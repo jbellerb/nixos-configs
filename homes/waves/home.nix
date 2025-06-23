@@ -142,14 +142,13 @@
 
   programs.jujutsu = {
     enable = true;
-    package = pkgs.unstable.jujutsu;
     settings = {
       user = {
         email = "foss@jae.zone";
         name = "jae beller";
       };
       signing = {
-        sign-all = true;
+        behavior = "own";
         backend = "gpg";
         key = "A76F1F7129E50AF7";
       };
