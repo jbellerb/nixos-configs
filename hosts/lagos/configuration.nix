@@ -8,6 +8,9 @@
     ../common.nix
   ];
 
+  # Extra Nix settings
+  nix.settings.experimental-features = [ "ca-derivations" ];
+
   # Device-specific packages
   environment.systemPackages = with pkgs; [ wl-clipboard ];
 

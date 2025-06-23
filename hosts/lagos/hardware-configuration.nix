@@ -32,6 +32,7 @@
 
   # CPU
   nix.settings.max-jobs = lib.mkDefault 4;
+  nix.settings.cores = lib.mkDefault 2;
 
   # Drives
   fileSystems = {
