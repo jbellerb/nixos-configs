@@ -31,7 +31,7 @@ let
     $ORIGIN bridge.raindropdrop.top.
 
     @ IN SOA suez.bridge.raindropdrop.top. suez.bridge.raindropdrop.top. (
-           2025020901 ; serial
+           2025062202 ; serial
                 28800 ; refresh
                  7200 ; retry
                864000 ; expire

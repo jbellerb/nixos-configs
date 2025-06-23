@@ -108,6 +108,10 @@
       group = "nginx";
       dnsProvider = "cloudflare";
       environmentFile = config.secrets.shanghai.cloudflare-dns-api-token.path;
+      extraLegoFlags = [
+        "--dns.resolvers"
+        "1.1.1.1"
+      ];
     };
   };
 }
